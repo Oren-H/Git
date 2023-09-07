@@ -18,8 +18,15 @@ public class Git {
         Blob blob = new Blob(fileName);
         String hash = blob.getHash();
         BufferedWriter bw = new BufferedWriter(new FileWriter("index.txt"));
-        bw.write(fileName + ": " + hash);
+        bw.write(fileName + " : " + hash);
         bw.newLine();
         bw.close();
+    }
+
+    public void remove(String fileName){
+        File blobFile = new File(".\\objects\\" + fileName);
+        File indexFile = new File("index.txt");
+        blobFile.delete();
+
     }
 }
