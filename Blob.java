@@ -3,10 +3,12 @@ import java.nio.file.Path;
 
 public class Blob{
 
+    private String hash;
+
     public Blob(String fileName) throws Exception{
         Path filePath = Path.of(fileName);
         String fileContents = Files.readString(filePath);
-        String hash = byteArrayToHexString(fileContents.getBytes());
+        hash = byteArrayToHexString(fileContents.getBytes());
         Path blobFilePath = Path.of("objects\\" + hash + ".txt");
         Files.writeString(blobFilePath, fileContents);
     }
@@ -19,5 +21,9 @@ public class Blob{
                 Integer.toString( ( b[i] & 0xff ) + 0x100, 16).substring( 1 );
         }
         return result;
+    }
+
+    public String getHash(){
+        return hash;
     }
 }
