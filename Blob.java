@@ -8,13 +8,14 @@ public class Blob{
     public Blob(String fileName) throws Exception{
         Path filePath = Path.of(fileName);
         String fileContents = Files.readString(filePath);
-        hash = byteArrayToHexString(fileContents.getBytes());
+        hash = getHash(fileContents);
         Path blobFilePath = Path.of("objects\\" + hash + ".txt");
         Files.writeString(blobFilePath, fileContents);
     }
 
     //hashes an array of bytes to a string using the Sha1 hash function
-    public static String byteArrayToHexString(byte[] b) {
+    public String getHash(String contents) {
+        byte[] b = contents.getBytes();
         String result = "";
         for (int i=0; i < b.length; i++) {
           result +=
