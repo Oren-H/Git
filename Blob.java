@@ -11,7 +11,7 @@ public class Blob{
         Files.writeString(blobFilePath, fileContents);
     }
 
-    //converts an array of bytes to a string using the Sha1 hash function
+    //hashes an array of bytes to a string using the Sha1 hash function
     public static String byteArrayToHexString(byte[] b) {
         String result = "";
         for (int i=0; i < b.length; i++) {
@@ -19,7 +19,5 @@ public class Blob{
                 Integer.toString( ( b[i] & 0xff ) + 0x100, 16).substring( 1 );
         }
         return result;
-      }
-
-    
+    }
 }
