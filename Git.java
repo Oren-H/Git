@@ -14,25 +14,27 @@ public class Git {
 
     public void init() throws IOException{
         File indexFile = new File("index");
+        indexFile.createNewFile();
         File objFolder = new File("objects");
+        //objFolder.createNewFile();
         objFolder.mkdir();
     }
     
     public void add(String fileName) throws Exception{
         Blob blob = new Blob(fileName);
         String hash = blob.getBlobHash();
-        BufferedWriter bw = new BufferedWriter(new FileWriter("index.txt"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("index"));
         bw.write(fileName + " : " + hash);
         bw.newLine();
         bw.close();
     }
 
     public void remove(String fileName) throws IOException{
-        File blobFile = new File(".\\objects\\" + fileName);
+        File blobFile = new File("/objects/" + fileName);
         Path filePath = Path.of(fileName);
         String fileContents = Files.readString(filePath);
         File indexFile = new File("index");
-        File indexTemp = new File("temp.txt");
+        File indexTemp = new File("temp");
         blobFile.delete();
 
 

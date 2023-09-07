@@ -1,16 +1,25 @@
+import java.io.File;
+import java.io.FileWriter;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class Blob{
 
     private String hash;
 
     public Blob(String fileName) throws Exception{
-        Path filePath = Path.of(fileName);
+        Path filePath = Paths.get(fileName);
         String fileContents = Files.readString(filePath);
         hash = getStringHash(fileContents);
-        Path blobFilePath = Path.of("objects\\" + hash + ".txt");
-        Files.writeString(blobFilePath, fileContents);
+        File blobFile = new File("./objects/" + hash);
+        blobFile.createNewFile();
+        FileWriter fw = new FileWriter(blobFile);
+        //Path blobFilePath = Path.of("/objects/" + hash);
+        //Files.writeString(blobFilePath, fileContents, StandardCharsets.UTF_8);
+        fw.write(fileContents);
+        fw.close();
     }
 
     //hashes an array of bytes to a string using the Sha1 hash function
