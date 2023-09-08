@@ -39,7 +39,7 @@ public class Git {
         
         Blob blob = new Blob(fileName);
         String hash = blob.getBlobHash();
-        BufferedWriter bw = new BufferedWriter(new FileWriter("index"));
+        BufferedWriter bw = new BufferedWriter(new FileWriter("index", true));
         bw.write(fileName + " : " + hash);
         bw.newLine();
         bw.close();
