@@ -11,7 +11,6 @@ import java.util.Arrays;
 
 public class Git {
     public Git(){
-       
     }
 
     public void init() throws IOException{
