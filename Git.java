@@ -47,12 +47,10 @@ public class Git {
     }
 
     public void remove(String fileName) throws IOException{
-        File blobFile = new File("./objects/" + fileName);
         Path filePath = Path.of(fileName);
         String fileContents = Files.readString(filePath);
         File indexFile = new File("index");
         File indexTemp = new File("temp");
-        blobFile.delete();
 
         BufferedReader reader = new BufferedReader(new FileReader(indexFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(indexTemp));
