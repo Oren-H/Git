@@ -1,6 +1,5 @@
 import java.io.File;
 import java.io.FileWriter;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,8 +15,6 @@ public class Blob{
         File blobFile = new File("./objects/" + hash);
         blobFile.createNewFile();
         FileWriter fw = new FileWriter(blobFile);
-        //Path blobFilePath = Path.of("/objects/" + hash);
-        //Files.writeString(blobFilePath, fileContents, StandardCharsets.UTF_8);
         fw.write(fileContents);
         fw.close();
     }
