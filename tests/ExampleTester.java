@@ -1,3 +1,4 @@
+package tests;
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -10,6 +11,8 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import Blob;
 
 //TODO: write tests for oren code
 public class ExampleTester {
