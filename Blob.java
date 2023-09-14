@@ -14,9 +14,13 @@ public class Blob{
     public Blob(String fileName) throws Exception{
         Path filePath = Paths.get(fileName);
         String fileContents = Files.readString(filePath);
+
         hash = getStringHash(fileContents);
+
+        //FIXME: this does not create the objects folder if it doesn't exists
         File blobFile = new File("./objects/" + hash);
         blobFile.createNewFile();
+
         FileWriter fw = new FileWriter(blobFile);
         fw.write(fileContents);
         fw.close();

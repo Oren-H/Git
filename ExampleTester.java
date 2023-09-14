@@ -1,4 +1,5 @@
-package tests;
+
+
 import static org.junit.Assert.*;
 
 import java.io.File;
@@ -11,8 +12,6 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-
-import Blob;
 
 //TODO: write tests for oren code
 public class ExampleTester {
@@ -72,8 +71,9 @@ public class ExampleTester {
         File file_junit1 = new File("objects/" + Blob.getStringHash());
         assertTrue("Blob file to add not found", file_junit1.exists());
 
+
         // Read file contents
-        String indexFileContents = MyUtilityClass.readAFileToAString("objects/" + file1.methodToGetSha1());
+        String indexFileContents = Utils.readAFileToAString("objects/" + file1.methodToGetSha1());
         assertEquals("File contents of Blob don't match file contents pre-blob creation", indexFileContents,
                 file1.getContents());
     }

@@ -1,4 +1,5 @@
 import java.util.*; 
+import java.io.*; 
 
 public class Tree {
     private StringBuilder contents;
@@ -51,6 +52,19 @@ public class Tree {
             }
         }
 
+        sc.close(); 
+
         contents = newContent; 
+    }
+
+    public void writeToFile () throws Exception //will write the contents to a file 
+    {
+        String fileName = Blob.getStringHash(contents.toString());
+
+        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter("./objects/" + fileName)));
+
+        pw.print(contents.toString());
+
+        pw.close(); 
     }
 }
