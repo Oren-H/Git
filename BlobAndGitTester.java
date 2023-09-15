@@ -1,8 +1,6 @@
-
-
 import static org.junit.Assert.*;
 
-import java.io.File;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -13,9 +11,12 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-public class ExampleTester {
+public class BlobAndGitTester {
+
+    private static String testFile = "testfile.txt";
 
     //runs before every test
+    //TODO: need to make the file here
     @BeforeAll
     static void setUpBeforeClass() throws Exception {
         /*
@@ -23,6 +24,17 @@ public class ExampleTester {
          * Utils.deleteFile("index");
          * Utils.deleteDirectory("objects");
          */
+
+        File f = new File(testFile);
+        f.createNewFile();
+
+        PrintWriter pw = new PrintWriter(new BufferedWriter(new FileWriter(testFile)));
+
+        pw.print("foobar"); 
+        pw.close();
+
+        File dir = new File("/objects");
+        dir.mkdirs();
     }
 
     //runs after every test
@@ -33,6 +45,8 @@ public class ExampleTester {
          * Utils.deleteFile("index");
          * Utils.deleteDirectory("objects");
          */
+
+         //NB: don't need to delete since nothing else will access this folder
     }
 
     @Test
@@ -66,17 +80,16 @@ public class ExampleTester {
         //     System.out.println("An error occurred: " + e.getMessage());
         // }
 
-        String fileName = "./file1.txt";
-        Blob b = new Blob (fileName);
+        Blob b = new Blob (testFile);
 
         // Check blob exists in the objects folder
-        File file_junit1 = new File("./objects/" + Blob.getStringHash(fileName));
+        File file_junit1 = new File("./objects/" + Blob.getStringHash(testFile));
         assertTrue("Blob file to add not found", file_junit1.exists());
 
 
         // Read file contents
-        String indexFileContents = Utils.readFileToString("./objects/" + Blob.getStringHash(fileName));
-        String mainFileContents = Utils.readFileToString(fileName);
+        String indexFileContents = Utils.readFileToString("./objects/" + Blob.getStringHash(testFile));
+        String mainFileContents = Utils.readFileToString(testFile);
         assertTrue("File contents of Blob don't match file contents pre-blob creation", indexFileContents.equals(mainFileContents));
     }
 }

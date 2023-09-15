@@ -6,7 +6,7 @@ public class Utils {
     {
         BufferedReader br = new BufferedReader (new FileReader(fileName));
 
-        StringBuilder sb = new StringBuilder(fileName);
+        StringBuilder sb = new StringBuilder("");
 
         while (br.ready())
         {
