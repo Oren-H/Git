@@ -65,5 +65,47 @@
                 ]
             }
         ]
+    },
+    {
+        "className": "Tree",
+        "constructorConfigs": [
+            {
+                "parameterTypes": [
+                    ""
+                ],
+                "values": [
+                    ""
+                ]
+            }
+        ],
+        "methodConfigs": [
+            {
+                "methodName": "add",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "file1.txt"
+                ]
+            },
+            {
+                "methodName": "remove",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "file1.txt"
+                ]
+            },
+            {
+                "methodName": "writeToFile",
+                "parameters": [
+                    ""
+                ],
+                "values": [
+                    ""
+                ]
+            }
+        ]
     }
 ]
