@@ -13,7 +13,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-//TODO: write tests for oren code
 public class ExampleTester {
 
     //runs before every test
@@ -55,26 +54,29 @@ public class ExampleTester {
     @DisplayName("[15] Test if adding a blob works.  5 for sha, 5 for file contents, 5 for correct location")
     void testCreateBlob() throws Exception {
 
-        try {
+        // try {
 
-            // Manually create the files and folders before the 'testAddFile'
-            // MyGitProject myGitClassInstance = new MyGitProject();
-            // myGitClassInstance.init();
+        //     // Manually create the files and folders before the 'testAddFile'
+        //     // MyGitProject myGitClassInstance = new MyGitProject();
+        //     // myGitClassInstance.init();
 
-            // TestHelper.runTestSuiteMethods("testCreateBlob", file1.getName());
+        //     // TestHelper.runTestSuiteMethods("testCreateBlob", file1.getName());
 
-        } catch (Exception e) {
-            System.out.println("An error occurred: " + e.getMessage());
-        }
+        // } catch (Exception e) {
+        //     System.out.println("An error occurred: " + e.getMessage());
+        // }
+
+        String fileName = "./file1.txt";
+        Blob b = new Blob (fileName);
 
         // Check blob exists in the objects folder
-        File file_junit1 = new File("objects/" + Blob.getStringHash());
+        File file_junit1 = new File("./objects/" + Blob.getStringHash(fileName));
         assertTrue("Blob file to add not found", file_junit1.exists());
 
 
         // Read file contents
-        String indexFileContents = Utils.readAFileToAString("objects/" + file1.methodToGetSha1());
-        assertEquals("File contents of Blob don't match file contents pre-blob creation", indexFileContents,
-                file1.getContents());
+        String indexFileContents = Utils.readFileToString("./objects/" + Blob.getStringHash(fileName));
+        String mainFileContents = Utils.readFileToString(fileName);
+        assertTrue("File contents of Blob don't match file contents pre-blob creation", indexFileContents.equals(mainFileContents));
     }
 }

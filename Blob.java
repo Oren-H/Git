@@ -12,8 +12,7 @@ public class Blob{
     private String hash;
 
     public Blob(String fileName) throws Exception{
-        Path filePath = Paths.get(fileName);
-        String fileContents = Files.readString(filePath);
+        String fileContents = Utils.readFileToString(fileName);
 
         hash = getStringHash(fileContents);
 

@@ -70,12 +70,8 @@
         "className": "Tree",
         "constructorConfigs": [
             {
-                "parameterTypes": [
-                    ""
-                ],
-                "values": [
-                    ""
-                ]
+                "parameterTypes": [],
+                "values": []
             }
         ],
         "methodConfigs": [
@@ -99,12 +95,8 @@
             },
             {
                 "methodName": "writeToFile",
-                "parameters": [
-                    ""
-                ],
-                "values": [
-                    ""
-                ]
+                "parameters": [],
+                "values": []
             }
         ]
     }
