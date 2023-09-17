@@ -9,6 +9,11 @@ public class Tree {
         contents = new StringBuilder();
     }    
 
+    public String getContents ()
+    {
+        return contents.toString(); 
+    }
+
     public void add (String entry) //assume its a proper entry
     {
         //check if the entry already exists
