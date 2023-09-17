@@ -17,4 +17,23 @@ public class Utils {
 
         return sb.toString();
     }
+
+    public static String readLineWhichContains (String fileName, String substring)  throws Exception
+    {
+        Scanner sc = new Scanner (new File (fileName));
+
+        while (sc.hasNextLine())
+        {
+            String nextLine = sc.nextLine();
+            if (nextLine.contains(substring))
+            {
+                return nextLine;
+            }
+        }
+
+
+        sc.close();
+
+        return "";
+    }
 }

@@ -114,4 +114,54 @@ public class BlobAndGitTester {
         assertTrue("NO INDEX FILE FOUND", indexFile.isFile());
     }
     
+
+    @Test
+    @DisplayName ("Test if Git Add method works")
+    void testGitAdd () throws Exception
+    {
+        Git g = new Git ();
+        
+        g.init();  //make sure to run test for gitInit first
+
+        g.add(testFile); 
+
+        //test if it creates a file in the object folder
+        String hash = Blob.getStringHash(Utils.readFileToString(testFile)); 
+        File f = new File ("./objects/" + hash);
+        assertTrue ("Git add did not create objects folder", f.exists());
+
+        //test if it added something to the index file
+        String lineInIndex = Utils.readLineWhichContains("index", testFile);
+        assertTrue ("Git add didn't update index file", lineInIndex.equals(testFile + " : " + hash));
+    }
+
+    @Test
+    @DisplayName ("Test if Git Remove method works")
+    void testGitRemove () throws Exception
+    {
+        Git g = new Git ();
+
+        g.init();
+        g.add(testFile);
+
+        FileWriter fw = new FileWriter("testfile2.txt");
+        fw.write("ee r menee r");
+        fw.close();
+
+        g.add("testfile2.txt");
+        g.remove("testfile2.txt");
+
+        //check whether it's removed from index
+
+        String hash = Blob.getStringHash(Utils.readFileToString("testfile2.txt"));
+
+        String lineInIndex = Utils.readLineWhichContains("index", "testfile2.txt");
+        String lineInIndex2 = Utils.readLineWhichContains("index", hash);
+
+        assertTrue ("Did not remove from the index file", lineInIndex.equals("") && lineInIndex2.equals(""));
+
+        //check whether it's removed from the objects folder
+        File f = new File ("./objects/" + hash);
+        assertTrue ("Did not remove entry from objects folder", f.exists());
+    }
 }
