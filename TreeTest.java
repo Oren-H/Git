@@ -36,13 +36,15 @@ public class TreeTest {
 
     @Test
     void testAdd() throws Exception {
-        File f = new File ("temp.txt");
-
         Tree tree = new Tree();
 
-        tree.add("tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b")
-        tree.add("blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt")
-        f.createNewFile();
+        String entry1 = "tree : bd1ccec139dead5ee0d8c3a0499b42a7d43ac44b";
+        String entry2 = "blob : 81e0268c84067377a0a1fdfb5cc996c93f6dcf9f : file1.txt";
+
+        tree.add(entry1);
+        tree.add(entry2);
+
+        assertTrue ("Did not add the entries to the tree", tree.getContents().contains(entry1) && tree.getContents().contains(entry2));
     }
 
     @Test
