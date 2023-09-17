@@ -32,9 +32,6 @@ public class BlobAndGitTester {
 
         pw.print("foobar"); 
         pw.close();
-
-        File dir = new File("./objects");
-        dir.mkdirs();
     }
 
     //runs after every test
@@ -49,20 +46,26 @@ public class BlobAndGitTester {
          //NB: don't need to delete since nothing else will access this folder
     }
 
+
     @Test
     @DisplayName("[8] Test if initialize and objects are created correctly")
     void testInitialize() throws Exception {
 
         // Run the person's code
         // TestHelper.runTestSuiteMethods("testInitialize");
+        Git g = new Git ();
+        g.init(); 
 
         // check if the file exists
+        
         File file = new File("index");
         Path path = Paths.get("objects");
 
         assertTrue(file.exists());
         assertTrue(Files.exists(path));
     }
+
+    //              BLOB TESTS 
 
     @Test
     @DisplayName("[15] Test if adding a blob works.  5 for sha, 5 for file contents, 5 for correct location")
@@ -94,4 +97,21 @@ public class BlobAndGitTester {
         String mainFileContents = Utils.readFileToString(testFile);
         assertTrue("File contents of Blob don't match file contents pre-blob creation", indexFileContents.equals(mainFileContents));
     }
+
+    @Test
+    @DisplayName ("Test if Git Init method works")
+    void testGitInit () throws Exception 
+    {
+        Git g = new Git ();    
+        g.init();
+
+        //check if objects folder is created
+        File objectsFolder = new File ("./objects");
+        assertTrue ("NO OBJECST FOLDER FOUND", objectsFolder.isDirectory());
+
+        //check if index file is created 
+        File indexFile = new File ("./index");
+        assertTrue("NO INDEX FILE FOUND", indexFile.isFile());
+    }
+    
 }

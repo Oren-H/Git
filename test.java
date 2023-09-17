@@ -16,10 +16,5 @@ public class test {
 
         Blob b = new Blob ("testfile.txt"); 
         System.out.println(Utils.readFileToString("testfile.txt"));
-
-        File file_junit1 = new File("./objects/" + Blob.getStringHash("testfile.txt"));
-        System.out.println(file_junit1.exists());
-
-
    }
 }

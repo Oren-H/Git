@@ -16,7 +16,10 @@ public class Blob{
 
         hash = getStringHash(fileContents);
 
-        //FIXME: this does not create the objects folder if it doesn't exists
+        //create objects folder
+        File dir = new File("./objects");
+        dir.mkdirs();
+
         File blobFile = new File("./objects/" + hash);
         blobFile.createNewFile();
 
