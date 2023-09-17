@@ -33,7 +33,7 @@ public class BlobAndGitTester {
         pw.print("foobar"); 
         pw.close();
 
-        File dir = new File("/objects");
+        File dir = new File("./objects");
         dir.mkdirs();
     }
 
@@ -80,15 +80,17 @@ public class BlobAndGitTester {
         //     System.out.println("An error occurred: " + e.getMessage());
         // }
 
-        Blob b = new Blob (testFile);
+
+        Blob b = new Blob (testFile); 
 
         // Check blob exists in the objects folder
-        File file_junit1 = new File("./objects/" + Blob.getStringHash(testFile));
+        String hash = Blob.getStringHash(Utils.readFileToString(testFile));
+        File file_junit1 = new File("./objects/" + hash);
         assertTrue("Blob file to add not found", file_junit1.exists());
 
 
         // Read file contents
-        String indexFileContents = Utils.readFileToString("./objects/" + Blob.getStringHash(testFile));
+        String indexFileContents = Utils.readFileToString("./objects/" + hash);
         String mainFileContents = Utils.readFileToString(testFile);
         assertTrue("File contents of Blob don't match file contents pre-blob creation", indexFileContents.equals(mainFileContents));
     }

@@ -29,7 +29,7 @@ public class Blob{
     public static String getStringHash(String input)
     {
         try {
-            // getInstance() method is called with algorithm SHA-1
+            // getInstance() method is called with algorithm SHA-1 
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             byte[] messageDigest = md.digest(input.getBytes());
             BigInteger no = new BigInteger(1, messageDigest);
