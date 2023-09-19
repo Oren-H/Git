@@ -61,4 +61,19 @@ public class BlobTest {
         String mainFileContents = Utils.readFileToString(testFile);
         assertTrue("File contents of Blob don't match file contents pre-blob creation", indexFileContents.equals(mainFileContents));
     }
+
+    @Test
+    @DisplayName ("Test if the hash functions works correctly")
+    void testGetStringHash () throws Exception
+    {
+        String test1 = "hello world";
+        String answer1 = "2aae6c35c94fcfb415dbe95f408b9ce91ee846ed";
+        
+        assertTrue ("SHA 1 did not match", Blob.getStringHash(test1).equals (answer1) ); 
+
+        String test2 = "pencil";
+        String answer2 = "d2fc512490a15036460b5489401439d6da5407fa";
+        
+        assertTrue ("SHA 1 did not match", Blob.getStringHash(test2).equals (answer2) ); 
+    }
 }
