@@ -12,11 +12,17 @@ public class Blob{
     private String hash;
 
     public Blob(String fileName) throws Exception{
-        Path filePath = Paths.get(fileName);
-        String fileContents = Files.readString(filePath);
+        String fileContents = Utils.readFileToString(fileName);
+
         hash = getStringHash(fileContents);
+
+        //create objects folder
+        File dir = new File("./objects");
+        dir.mkdirs();
+
         File blobFile = new File("./objects/" + hash);
         blobFile.createNewFile();
+
         FileWriter fw = new FileWriter(blobFile);
         fw.write(fileContents);
         fw.close();
@@ -26,7 +32,7 @@ public class Blob{
     public static String getStringHash(String input)
     {
         try {
-            // getInstance() method is called with algorithm SHA-1
+            // getInstance() method is called with algorithm SHA-1 
             MessageDigest md = MessageDigest.getInstance("SHA-1");
             byte[] messageDigest = md.digest(input.getBytes());
             BigInteger no = new BigInteger(1, messageDigest);

@@ -25,17 +25,18 @@ public class Git {
     }
     
     public void add(String fileName) throws Exception{
-        File objectFolder = new File("./objects");
-        if (objectFolder.exists()){
-            File[] objects = objectFolder.listFiles();
-            for(File object: objects){
-                Path objectPath = Paths.get(object.getPath());
-                Path newFilePath = Paths.get(fileName);
-                if(isEqual(objectPath, newFilePath)){
-                    return;
-                }
-            }
-        }
+        //OREN THIS CODE IS UNNECESSARY
+        // File objectFolder = new File("./objects");
+        // if (objectFolder.exists()){
+        //     File[] objects = objectFolder.listFiles();
+        //     for(File object: objects){
+        //         Path objectPath = Paths.get(object.getPath());
+        //         Path newFilePath = Paths.get(fileName);
+        //         if(isEqual(objectPath, newFilePath)){
+        //             return;
+        //         }
+        //     }
+        // }
         
         Blob blob = new Blob(fileName);
         String hash = blob.getBlobHash();

@@ -1,0 +1,103 @@
+[
+    {
+        "className": "Git",
+        "constructorConfigs": [
+            {
+                "parameterTypes": [],
+                "values": []
+            }
+        ],
+        "methodConfigs": [
+            {
+                "methodName": "init",
+                "parameters": [],
+                "values": []
+            },
+            {
+                "methodName": "add",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "file.txt"
+                ]
+            },
+            {
+                "methodName": "remove",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "file.txt"
+                ]
+            },
+            {
+                "methodName": "isEqual",
+                "parameters": [
+                    "Path", "Path"
+                ],
+                "values": [
+                    "./", "./"
+                ]
+            }
+        ]
+    },
+    {
+        "className": "Blob",
+        "constructorConfigs": [
+            {
+                "parameterTypes": [
+                    "String"
+                ],
+                "values": [
+                    "file.txt"
+                ]
+            }
+        ],
+        "methodConfigs": [
+            {
+                "methodName": "getStringHash",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "foobar"
+                ]
+            }
+        ]
+    },
+    {
+        "className": "Tree",
+        "constructorConfigs": [
+            {
+                "parameterTypes": [],
+                "values": []
+            }
+        ],
+        "methodConfigs": [
+            {
+                "methodName": "add",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "file1.txt"
+                ]
+            },
+            {
+                "methodName": "remove",
+                "parameters": [
+                    "String"
+                ],
+                "values": [
+                    "file1.txt"
+                ]
+            },
+            {
+                "methodName": "writeToFile",
+                "parameters": [],
+                "values": []
+            }
+        ]
+    }
+]
