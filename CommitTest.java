@@ -66,7 +66,13 @@ public class CommitTest {
         Commit c = new Commit("f924e482dd33576fd0de90b6376f1671b08b5f52", "Bob", "committest");
         c.addNextCommitVal("2b98fbd4f414b26b612fa50b17879f62733254e6");
         File f = new File("./objects/" + c.shaOfFileContent());
-        assertTrue(f.exists());
+        BufferedReader br = new BufferedReader(new FileReader(f));
+        StringBuilder sb = new StringBuilder();
+        while(br.ready())
+        {
+            sb.append(br.readLine() + "\n");
+        }
+        assertTrue(sb.indexOf("2b98fbd4f414b26b612fa50b17879f62733254e6") > -1);
 
         
     }
