@@ -62,7 +62,7 @@ public class Tree {
         contents = newContent; 
     }
 
-    public void writeToFile () throws Exception //will write the contents to a file 
+    public String writeToFile () throws Exception //will write the contents to a file, returns the fileName
     {
         String fileName = Blob.getStringHash(contents.toString());
 
@@ -71,5 +71,39 @@ public class Tree {
         pw.print(contents.toString());
 
         pw.close(); 
+
+        return fileName;
+    }
+
+    //adds an entire directory to the tree
+    public void addDirectory(String directoryPath) throws Exception{
+
+        File dir = new File(directoryPath);
+
+        //traverse each file
+        for(File file: dir.listFiles()){
+            
+            if(file.isDirectory()){
+                
+                //creates a child tree and recursively runs addDirectory
+                Tree childTree = new Tree();
+                childTree.addDirectory(file.getAbsolutePath());
+                String treeSha = childTree.writeToFile();
+                Blob treeBlob = new Blob("./objects/" + treeSha);
+
+                //adds entry to file
+                String entry = "tree : " + treeSha + " : " + file.getName();
+                add(entry);
+            }
+
+            //get the sha for the file
+            String fileName = file.getAbsolutePath();
+            Blob blob = new Blob (fileName);
+            String sha = blob.getBlobHash();
+
+            //create and add a string entry
+            String entry = "blob : " + sha + " : " + file.getName();
+            add(entry);
+        }
     }
 }
