@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
+import java.util.Formatter;
 
 public class Commit 
 {
@@ -22,9 +24,9 @@ public class Commit
     {
         Tree t = new Tree();
         shaOfTreeObj = shaOfTree();
-        shaOfPrevCommit = this.shaOfPrevCommit;
-        authorName = this.authorName;
-        Summary = this.Summary;
+        this.shaOfPrevCommit = shaOfPrevCommit;
+        this.authorName = authorName;
+        this.Summary = Summary;
         date = getDate();
     }
 
@@ -33,8 +35,8 @@ public class Commit
         Tree t = new Tree();
         shaOfTreeObj = shaOfTree();
         shaOfPrevCommit = "";
-        authorName = this.authorName;
-        Summary = this.Summary;
+        this.authorName = authorName;
+        this.Summary = Summary;
         date = getDate();
     }
 
@@ -74,30 +76,46 @@ public class Commit
         return s;
     }
 
-    private String commitwithoutprevLine()
+    public String commitwithoutprevLine()
     {
-        return (shaOfTreeObj +  "\n" + shaOfPrevCommit + "\n" +
+        return (shaOfTreeObj +  "\n" + shaOfPrevCommit + "\n" + "\n" +
          date+ "\n" + authorName + "\n" + Summary);
     }
 
-    public String shaOfFileContent()
+    public String shaOfFileContent() throws IOException
     {
-        
-         try {
-            // getInstance() method is called with algorithm SHA-1 
-            MessageDigest md = MessageDigest.getInstance("SHA-1");
-            byte[] messageDigest = md.digest(commitwithoutprevLine().getBytes());
-            BigInteger no = new BigInteger(1, messageDigest);
-            String hashtext = no.toString(16);
-            while (hashtext.length() < 32) {
-                hashtext = "0" + hashtext;
-            }
-            return hashtext;
+        String  dataAsString = commitwithoutprevLine();
+
+        String sha1 = "";
+        try
+        {
+            MessageDigest crypt = MessageDigest.getInstance("SHA-1");
+            crypt.reset();
+            crypt.update(dataAsString.getBytes("UTF-8"));
+            sha1 = byteToHexBlob(crypt.digest());
         }
-        // For specifying wrong message digest algorithms
-        catch (NoSuchAlgorithmException e) {
-            throw new RuntimeException(e);
+        catch(NoSuchAlgorithmException e)
+        {
+            e.printStackTrace();
         }
+        catch(UnsupportedEncodingException e)
+        {
+            e.printStackTrace();
+        }
+        return sha1;
+    }
+
+    //helper for above method
+    public static String byteToHexBlob(final byte[] hash)
+    {
+        Formatter formatter = new Formatter();
+        for (byte b : hash)
+        {
+            formatter.format("%02x", b);
+        }
+        String result = formatter.toString();
+        formatter.close();
+        return result;
     }
 
 

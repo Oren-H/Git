@@ -53,15 +53,21 @@ public class CommitTest {
     @Test
     @DisplayName ("Test SHA1")
     void testSHA1() throws Exception {
-        Commit c = new Commit("f924e482dd33576fd0de90b6376f1671b08b5f52", "Bob", "test");
+        Commit c = new Commit("f924e482dd33576fd0de90b6376f1671b08b5f52", "Bob", "committest");
         String sha = c.shaOfFileContent();
+        assertTrue(sha.equals("8be804fc84bd6b80dda283d6843feb9a2543a0bd"));
+        
     }
 
     @Test
-    @DisplayName ("Test adding CommitVal")
-    void testAddCommitVal() throws Exception 
+    @DisplayName ("Test adding previous commit value")
+    void testAddPreviousCommitVal() throws Exception 
     {
-        
+        Commit c = new Commit("f924e482dd33576fd0de90b6376f1671b08b5f52", "Bob", "committest");
+        c.addNextCommitVal("2b98fbd4f414b26b612fa50b17879f62733254e6");
+        File f = new File("./objects/" + c.shaOfFileContent());
+        assertTrue(f.exists());
+
         
     }
 }
