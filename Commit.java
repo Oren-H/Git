@@ -117,7 +117,4 @@ public class Commit
         formatter.close();
         return result;
     }
-
-
-    
 }

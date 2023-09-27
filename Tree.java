@@ -94,16 +94,25 @@ public class Tree {
                 //adds entry to file
                 String entry = "tree : " + treeSha + " : " + file.getName();
                 add(entry);
+                System.out.println("entry has been added!");
             }
 
-            //get the sha for the file
-            String fileName = file.getAbsolutePath();
-            Blob blob = new Blob (fileName);
-            String sha = blob.getBlobHash();
+            else{
+                
+                //get the sha for the file
+                String fileName = file.getAbsolutePath();
 
-            //create and add a string entry
-            String entry = "blob : " + sha + " : " + file.getName();
-            add(entry);
+                Blob blob = new Blob (fileName);
+
+                String sha = blob.getBlobHash();
+
+                //create and add a string entry
+                String entry = "blob : " + sha + " : " + file.getName();
+            
+                add(entry);
+            }
+
+            
         }
     }
 }

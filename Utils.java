@@ -36,4 +36,10 @@ public class Utils {
 
         return "";
     }
+
+    public static void writeStringToFile(String str, String path) throws FileNotFoundException{
+        PrintWriter pw = new PrintWriter(path);
+        pw.print(str); 
+        pw.close();
+    }
 }
