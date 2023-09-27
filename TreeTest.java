@@ -32,13 +32,27 @@ public class TreeTest {
         File objects = new File ("./objects");
         objects.mkdirs();
 
-        File testDir = new File("./testDirectory");
+        //prepare simple test files
+        File testDir = new File("./testDirectory1");
         testDir.mkdir();
 
         Utils.writeStringToFile("hello", "./testDirectory/file1.txt");
         Utils.writeStringToFile("world", "./testDirectory/file2.txt");
         Utils.writeStringToFile("hello world", "./testDirectory/file3.txt");
 
+        //prepare complicated test files
+        File testDir2 = new File("./testDirectory2");
+        testDir2.mkdir();
+
+        File childDir1 = new File("./testDirectory2/childDirectory1");
+        childDir1.mkdir();
+
+        File childDir2 = new File("./testDirectory2/childDirectory2");
+        childDir2.mkdir();
+
+        Utils.writeStringToFile("hello", "./testDirectory2/file1.txt");
+        Utils.writeStringToFile("world", "./testDirectory2/childDirectory1/file2.txt");
+        Utils.writeStringToFile("hello world", "./testDirectory2/childDirectory1/file3.txt");
     }
 
     @Test
@@ -97,18 +111,33 @@ public class TreeTest {
     @Test
     void testAddDirectory() throws Exception{
 
-        //run their code
-        Tree dir = new Tree();
-        dir.addDirectory("./testDirectory");
-        dir.writeToFile();
+        //run code for test 1
+        Tree dir1 = new Tree();
+        dir1.addDirectory("./testDirectory1");
+        dir1.writeToFile();
 
         //test if all files were blobbed
-
-        File treeFile = new File("./objects/fd79fb2dbd789de35288a0504171833120028ad3");
-        assertTrue(treeFile.exists());
+        File treeFile1 = new File("./objects/fd79fb2dbd789de35288a0504171833120028ad3");
+        assertTrue(treeFile1.exists());
 
         String contents = Utils.readFileToString("./objects/fd79fb2dbd789de35288a0504171833120028ad3");
+        
         assertEquals("blob : 7c211433f02071597741e6ff5a8ea34789abbf43 : file2.txt\nblob : 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed : file3.txt\nblob : aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d : file1.txt", contents);
+
+        //run code for test 2
+        Tree dir2 = new Tree();
+        dir2.addDirectory("./testDirectory2");
+        dir2.writeToFile();
+
+        //test if all files were blobbed
+        File treeFile2 = new File("./objects/6a9ef65580741c32c011f8af930e056be718ea6b");
+        assertTrue(treeFile2.exists());
+
+        String contents2 = Utils.readFileToString("./objects/6a9ef65580741c32c011f8af930e056be718ea6b");
+
+        assertEquals("blob : aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d : file1.txt\ntree : da39a3ee5e6b4b0d3255bfef95601890afd80709 : childDirectory2\ntree : 3f77f0b5063b7179a415c07e1b4e1f67eeb2e4ed : childDirectory1", contents2);
+
+        
 
         
         
