@@ -32,6 +32,13 @@ public class TreeTest {
         File objects = new File ("./objects");
         objects.mkdirs();
 
+        File testDir = new File("./testDirectory");
+        testDir.mkdir();
+
+        Utils.writeStringToFile("hello", "./testDirectory/file1.txt");
+        Utils.writeStringToFile("world", "./testDirectory/file2.txt");
+        Utils.writeStringToFile("hello world", "./testDirectory/file3.txt");
+
     }
 
     @Test
@@ -85,5 +92,28 @@ public class TreeTest {
 
         //then check to see if all the information is copied correctly
         assertTrue ("Tree Sha file does not contain the correct information", Utils.readFileToString("./objects/" + hash).equals(tree.getContents()));
+    }
+
+    @Test
+    void testAddDirectory() throws Exception{
+
+        //run their code
+        Tree dir = new Tree();
+        dir.addDirectory("./testDirectory");
+        dir.writeToFile();
+
+        //test if all files were blobbed
+
+        File treeFile = new File("./objects/fd79fb2dbd789de35288a0504171833120028ad3");
+        assertTrue(treeFile.exists());
+
+        String contents = Utils.readFileToString("./objects/fd79fb2dbd789de35288a0504171833120028ad3");
+        assertEquals("blob : 7c211433f02071597741e6ff5a8ea34789abbf43 : file2.txt\nblob : 2aae6c35c94fcfb415dbe95f408b9ce91ee846ed : file3.txt\nblob : aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d : file1.txt", contents);
+
+        
+        
+
+
+
     }
 }

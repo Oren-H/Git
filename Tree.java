@@ -98,7 +98,7 @@ public class Tree {
             }
 
             else{
-                
+
                 //get the sha for the file
                 String fileName = file.getAbsolutePath();
 
@@ -111,8 +111,6 @@ public class Tree {
             
                 add(entry);
             }
-
-            
         }
     }
 }
