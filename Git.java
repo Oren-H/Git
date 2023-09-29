@@ -24,24 +24,34 @@ public class Git {
         }
     }
     
-    public void add(String fileName) throws Exception{
-        //OREN THIS CODE IS UNNECESSARY
-        // File objectFolder = new File("./objects");
-        // if (objectFolder.exists()){
-        //     File[] objects = objectFolder.listFiles();
-        //     for(File object: objects){
-        //         Path objectPath = Paths.get(object.getPath());
-        //         Path newFilePath = Paths.get(fileName);
-        //         if(isEqual(objectPath, newFilePath)){
-        //             return;
-        //         }
-        //     }
-        // }
+    //blobs a file and adds it to index
+    public void addFile(String fileName) throws Exception{
         
         Blob blob = new Blob(fileName);
+
         String hash = blob.getBlobHash();
+
         BufferedWriter bw = new BufferedWriter(new FileWriter("index", true));
-        bw.write(fileName + " : " + hash);
+
+        bw.write("blob : " + hash + " : " + fileName);
+        bw.newLine();
+        bw.close();
+    }
+
+    //blobs an entire directory as a tree and adds to index
+    public void addDirectory(String directoryName) throws Exception{
+       
+        //create tree from directory
+        Tree dir = new Tree();
+
+        dir.addDirectory(directoryName);
+
+        String hash = dir.writeToFile();
+
+        //add to index
+        BufferedWriter bw = new BufferedWriter(new FileWriter("index", true));
+
+        bw.write("tree : " + hash + " : " + directoryName);
         bw.newLine();
         bw.close();
     }
