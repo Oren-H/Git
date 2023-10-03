@@ -30,6 +30,9 @@ public class Commit
         this.authorName = authorName;
         this.Summary = Summary;
         date = getDate();
+
+        //edit the nextCommit line of the previous Commit file
+        editPreviousCommit();
     }
 
     public Commit(String authorName, String Summary) throws Exception
@@ -46,6 +49,7 @@ public class Commit
 
     //creates a tree from the index file and wipes the index file
     public String createTreeFromIndex() throws Exception{
+
         //creates tree from index file
         Tree t = new Tree();
         BufferedReader br = new BufferedReader(new FileReader("./objects/index"));
@@ -53,6 +57,8 @@ public class Commit
         while(br.ready()){
             t.add(br.readLine());
         }
+        br.close();
+
         String sha = t.writeToFile();
 
         //replaces index with empty file
@@ -64,6 +70,32 @@ public class Commit
 
         //returns sha of tree object
         return sha;
+    }
+
+    public void editPreviousCommit() throws IOException{
+
+        //access the previous commit
+        String contents = "";
+        String prevCommitPath = "./objects" + shaOfPrevCommit;
+        File prevCommit = new File(prevCommitPath);
+        BufferedReader br = new BufferedReader(new FileReader(prevCommit));
+        
+        //create the new file contents of the previous commit
+        int lineCounter = 0;
+        while(br.ready()){
+            if(lineCounter != 2){
+                contents += br.readLine();
+                lineCounter++;
+            }
+            else{
+                contents += ("\n" + shaOfTreeObj);
+            }
+        }
+        br.close();
+
+        //replace the previous commit with the new one
+        prevCommit.delete();
+        Utils.writeStringToFile(contents, prevCommitPath);
     }
 
     public void finishCommit() throws IOException
