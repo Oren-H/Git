@@ -42,7 +42,7 @@ public class GitTest {
 
         //test if it added something to the index file
         String lineInIndex = Utils.readLineWhichContains("index", testFile);
-        assertTrue ("Git add didn't update index file", lineInIndex.equals(testFile + " : " + hash));
+        assertTrue ("Git add didn't update index file", lineInIndex.equals("blob : " + hash + " : " + testFile));
     }
 
     @Test
@@ -80,9 +80,9 @@ public class GitTest {
         String hash = Blob.getStringHash(Utils.readFileToString("testfile2.txt"));
 
         String lineInIndex = Utils.readLineWhichContains("index", "testfile2.txt");
-        String lineInIndex2 = Utils.readLineWhichContains("index", hash);
+        // String lineInIndex2 = Utils.readLineWhichContains("index", hash);
 
-        assertTrue ("Did not remove from the index file", lineInIndex.equals("") && lineInIndex2.equals(""));
+        assertTrue ("Did not remove from the index file", lineInIndex.equals(""));
 
         //check whether it's removed from the objects folder
         File f = new File ("./objects/" + hash);

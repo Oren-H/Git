@@ -22,7 +22,6 @@ public class CommitTest {
         //make objects file
         File objects = new File ("./objects");
         objects.mkdirs();
-
     }
 
 
@@ -50,7 +49,6 @@ public class CommitTest {
         Commit c = new Commit("f924e482dd33576fd0de90b6376f1671b08b5f52", "Bob", "committest");
         String sha = c.shaOfFileContent();
         assertTrue(sha.equals("8be804fc84bd6b80dda283d6843feb9a2543a0bd"));
-        
     }
 
     @Test

@@ -64,7 +64,7 @@ public class Git {
         BufferedReader reader = new BufferedReader(new FileReader(indexFile));
         BufferedWriter writer = new BufferedWriter(new FileWriter(indexTemp));
 
-        String lineToRemove = fileName + " : " + Blob.getStringHash(fileContents);
+        String lineToRemove = "blob : " + Blob.getStringHash(fileContents) + " : " + fileName;
         String currentLine;
 
         while((currentLine = reader.readLine()) != null) {
