@@ -1,5 +1,8 @@
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -17,24 +20,50 @@ public class Commit
     String shaOfNextCommit;
     String date;
 
-    public Commit(String shaOfPrevCommit, String authorName, String Summary)
+    public Commit(String shaOfPrevCommit, String authorName, String Summary) throws Exception
     {
-        Tree t = new Tree();
-        shaOfTreeObj = shaOfTree();
+        //creates a tree and saves sha
+        shaOfTreeObj = createTreeFromIndex();
+
+        //saves rest of variables
         this.shaOfPrevCommit = shaOfPrevCommit;
         this.authorName = authorName;
         this.Summary = Summary;
         date = getDate();
     }
 
-    public Commit(String authorName, String Summary)
+    public Commit(String authorName, String Summary) throws Exception
     {
-        Tree t = new Tree();
-        shaOfTreeObj = shaOfTree();
+        //creates a tree and saves sha
+        shaOfTreeObj = createTreeFromIndex();
+
+        //saves rest of variables
         shaOfPrevCommit = "";
         this.authorName = authorName;
         this.Summary = Summary;
         date = getDate();
+    }
+
+    //creates a tree from the index file and wipes the index file
+    public String createTreeFromIndex() throws Exception{
+        //creates tree from index file
+        Tree t = new Tree();
+        BufferedReader br = new BufferedReader(new FileReader("./objects/index"));
+        
+        while(br.ready()){
+            t.add(br.readLine());
+        }
+        String sha = t.writeToFile();
+
+        //replaces index with empty file
+        File indexFile = new File("./objects/index");
+        indexFile.delete();
+
+        File emptyFile = new File("./objects/index");
+        emptyFile.createNewFile();
+
+        //returns sha of tree object
+        return sha;
     }
 
     public void finishCommit() throws IOException
