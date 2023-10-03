@@ -1,12 +1,6 @@
 import static org.junit.Assert.*;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.LinkedHashMap;
-
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -39,7 +33,7 @@ public class GitTest {
         
         g.init();  //make sure to run test for gitInit first
 
-        g.add(testFile); 
+        g.addFile(testFile); 
 
         //test if it creates a file in the object folder
         String hash = Blob.getStringHash(Utils.readFileToString(testFile)); 
@@ -72,13 +66,13 @@ public class GitTest {
         Git g = new Git ();
 
         g.init();
-        g.add(testFile);
+        g.addFile(testFile);
 
         FileWriter fw = new FileWriter("testfile2.txt");
         fw.write("ee r menee r");
         fw.close();
 
-        g.add("testfile2.txt");
+        g.addFile("testfile2.txt");
         g.remove("testfile2.txt");
 
         //check whether it's removed from index

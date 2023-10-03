@@ -1,11 +1,8 @@
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
@@ -76,15 +73,9 @@ public class Commit
         return s;
     }
 
-    public String commitwithoutprevLine()
-    {
-        return (shaOfTreeObj +  "\n" + shaOfPrevCommit + "\n" + "\n" +
-         date+ "\n" + authorName + "\n" + Summary);
-    }
-
     public String shaOfFileContent() throws IOException
     {
-        String  dataAsString = commitwithoutprevLine();
+        String  dataAsString = shaOfTreeObj +  "\n" + shaOfPrevCommit + "\n" + "\n" + date+ "\n" + authorName + "\n" + Summary;
 
         String sha1 = "";
         try
