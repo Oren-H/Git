@@ -9,10 +9,9 @@ import java.nio.file.Path;
 import java.util.Arrays;
 
 public class Git {
-    public Git(){
-    }
 
-    public void init() throws IOException{
+    //creates index and object folder
+    public static void init() throws IOException{
         File indexFile = new File("index");
         if(!indexFile.exists()){
              indexFile.createNewFile();
@@ -24,7 +23,7 @@ public class Git {
     }
     
     //blobs a file and adds it to index
-    public void addFile(String fileName) throws Exception{
+    public static void addFile(String fileName) throws Exception{
         
         Blob blob = new Blob(fileName);
 
@@ -38,7 +37,7 @@ public class Git {
     }
 
     //blobs an entire directory as a tree and adds to index
-    public void addDirectory(String directoryName) throws Exception{
+    public static void addDirectory(String directoryName) throws Exception{
        
         //create tree from directory
         Tree dir = new Tree();
@@ -55,7 +54,7 @@ public class Git {
         bw.close();
     }
 
-    public void remove(String fileName) throws IOException{
+    public static void remove(String fileName) throws IOException{
         Path filePath = Path.of(fileName);
         String fileContents = Files.readString(filePath);
         File indexFile = new File("index");

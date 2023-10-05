@@ -25,7 +25,7 @@ public class Blob{
         fw.close();
     }
 
-    //hashes an array of bytes to a string using the Sha1 hash function
+    //hashes a string using the Sha1 hash function
     public static String getStringHash(String input)
     {
         try {
@@ -34,7 +34,7 @@ public class Blob{
             byte[] messageDigest = md.digest(input.getBytes());
             BigInteger no = new BigInteger(1, messageDigest);
             String hashtext = no.toString(16);
-            while (hashtext.length() < 32) {
+            while (hashtext.length() < 40) {
                 hashtext = "0" + hashtext;
             }
             return hashtext;

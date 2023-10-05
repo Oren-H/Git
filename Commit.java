@@ -46,6 +46,22 @@ public class Commit
         date = getDate();
     }
 
+    public void finishCommit() throws IOException
+    {
+        
+        File f = new File("./objects/"+getShaOfCommit());
+        f.createNewFile();
+        BufferedWriter bw = new BufferedWriter(new FileWriter("./objects/"+ getShaOfCommit()));
+        bw.write(shaOfTreeObj + "\n");
+        bw.write(shaOfPrevCommit + "\n");
+        bw.write(shaOfNextCommit + "\n");
+        bw.write(date + "\n");
+        bw.write(authorName + "\n");
+        bw.write(Summary + "\n");
+        bw.close();
+
+    }
+
     //creates a tree from the index file and wipes the index file
     public String createTreeFromIndex() throws Exception{
 
@@ -98,22 +114,6 @@ public class Commit
         Utils.writeStringToFile(contents, prevCommitPath);
     }
 
-    public void finishCommit() throws IOException
-    {
-        
-        File f = new File("./objects/"+getShaOfCommit());
-        f.createNewFile();
-        BufferedWriter bw = new BufferedWriter(new FileWriter("./objects/"+ getShaOfCommit()));
-        bw.write(shaOfTreeObj + "\n");
-        bw.write(shaOfPrevCommit + "\n");
-        bw.write(shaOfNextCommit + "\n");
-        bw.write(date + "\n");
-        bw.write(authorName + "\n");
-        bw.write(Summary + "\n");
-        bw.close();
-
-    }
-
     public void addNextCommitVal(String nextSha) throws IOException
     {
         shaOfNextCommit = nextSha;
@@ -133,6 +133,7 @@ public class Commit
         String  dataAsString = shaOfTreeObj +  "\n" + shaOfPrevCommit + "\n" + "\n" + date+ "\n" + authorName + "\n" + Summary;
 
         String sha1 = "";
+        //String shaTest = Blob.getStringHash(dataAsString);
         try
         {
             MessageDigest crypt = MessageDigest.getInstance("SHA-1");

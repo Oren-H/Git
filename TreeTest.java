@@ -129,13 +129,5 @@ public class TreeTest {
         String contents2 = Utils.readFileToString("./objects/6a9ef65580741c32c011f8af930e056be718ea6b");
 
         assertEquals("blob : aaf4c61ddcc5e8a2dabede0f3b482cd9aea9434d : file1.txt\ntree : da39a3ee5e6b4b0d3255bfef95601890afd80709 : childDirectory2\ntree : 3f77f0b5063b7179a415c07e1b4e1f67eeb2e4ed : childDirectory1", contents2);
-
-        
-
-        
-        
-
-
-
     }
 }
