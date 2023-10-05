@@ -4,11 +4,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.LocalDateTime;
-import java.util.Formatter;
 
 public class Commit 
 {
@@ -131,38 +127,7 @@ public class Commit
     public String getShaOfCommit() throws IOException
     {
         String  dataAsString = shaOfTreeObj +  "\n" + shaOfPrevCommit + "\n" + "\n" + date+ "\n" + authorName + "\n" + Summary;
-
-        String sha1 = "";
-        //String shaTest = Blob.getStringHash(dataAsString);
-        try
-        {
-            MessageDigest crypt = MessageDigest.getInstance("SHA-1");
-            crypt.reset();
-            crypt.update(dataAsString.getBytes("UTF-8"));
-            sha1 = byteToHexBlob(crypt.digest());
-        }
-        catch(NoSuchAlgorithmException e)
-        {
-            e.printStackTrace();
-        }
-        catch(UnsupportedEncodingException e)
-        {
-            e.printStackTrace();
-        }
-        return sha1;
-    }
-
-    //helper for above method
-    public static String byteToHexBlob(final byte[] hash)
-    {
-        Formatter formatter = new Formatter();
-        for (byte b : hash)
-        {
-            formatter.format("%02x", b);
-        }
-        String result = formatter.toString();
-        formatter.close();
-        return result;
+        return Blob.getStringHash(dataAsString);
     }
 
     //returns the sha of a tree based on the sha of its commit
