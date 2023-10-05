@@ -51,8 +51,8 @@ public class Commit
         bw.write(shaOfTreeObj + "\n");
         bw.write(shaOfPrevCommit + "\n");
         bw.write(shaOfNextCommit + "\n");
-        bw.write(date + "\n");
         bw.write(authorName + "\n");
+        bw.write(date + "\n");
         bw.write(Summary + "\n");
         bw.close();
 
@@ -126,7 +126,7 @@ public class Commit
 
     public String getShaOfCommit() throws IOException
     {
-        String  dataAsString = shaOfTreeObj +  "\n" + shaOfPrevCommit + "\n" + "\n" + date+ "\n" + authorName + "\n" + Summary;
+        String  dataAsString = shaOfTreeObj +  "\n" + shaOfPrevCommit + "\n" + "\n" + authorName + "\n" + date + "\n" + Summary;
         return Blob.getStringHash(dataAsString);
     }
 
