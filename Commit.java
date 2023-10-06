@@ -88,15 +88,16 @@ public class Commit
 
         //access the previous commit
         String contents = "";
-        String prevCommitPath = "./objects" + shaOfPrevCommit;
+        String prevCommitPath = "./objects/" + shaOfPrevCommit;
         File prevCommit = new File(prevCommitPath);
         BufferedReader br = new BufferedReader(new FileReader(prevCommit));
         
         //create the new file contents of the previous commit
         int lineCounter = 0;
-        while(br.ready()){
+        String line = "";
+        while((line = br.readLine())!=null){
             if(lineCounter != 2){
-                contents += br.readLine();
+                contents += line;
                 lineCounter++;
             }
             else{
