@@ -97,18 +97,24 @@ public class Commit
         String line = "";
         while((line = br.readLine())!=null){
             if(lineCounter != 2){
-                contents += line;
+                contents += "\n" + line;
                 lineCounter++;
             }
             else{
                 contents += ("\n" + shaOfTreeObj);
+                lineCounter++;
             }
         }
         br.close();
 
+        //System.out.println(contents);
+
         //replace the previous commit with the new one
         prevCommit.delete();
         Utils.writeStringToFile(contents, prevCommitPath);
+        
+        //System.out.println(prevCommitPath);
+        //System.out.println("\n" + contents);
     }
 
     public void addNextCommitVal(String nextSha) throws IOException

@@ -20,6 +20,16 @@ public class CommitTestNew {
         dir1.mkdir();
         Utils.writeStringToFile("content 3", "file3.txt");
         Utils.writeStringToFile("content 4", "./directory 1/file4.txt");
+
+        //test 3 files
+        File dir2 = new File("directory 2");
+        dir2.mkdir();
+        Utils.writeStringToFile("content 5", "file5.txt");
+        Utils.writeStringToFile ("content 6", "./directory 2/file6.txt");
+        
+        //test 4 files
+        Utils.writeStringToFile("content 7", "file7.txt");
+        Utils.writeStringToFile("content 8", "file8.txt");
     }
 
     @AfterAll
@@ -61,6 +71,32 @@ public class CommitTestNew {
         //test sha1s
         File testCommit2 = new File("./objects/9ed765d5bc8dda682ad5598fd281fc465d7063c7");
         assertTrue(testCommit2.exists());
+    }
+
+    @Test
+    void addThirdAndFourthCommit() throws Exception{
+        //addSecondCommit();
+        
+        File testCommit2 = new File("./objects/9ed765d5bc8dda682ad5598fd281fc465d7063c7");
+        assertTrue(testCommit2.exists());
+
+        //add files to index for commit 3
+        Git.addFile("file5.txt");
+        Git.addDirectory("directory 2");
+
+        //create commit 3
+        File objects = new File("objects");
+        //System.out.println(objects.listFiles().length);
+
+        Commit commit3 = new Commit("9ed765d5bc8dda682ad5598fd281fc465d7063c7", "Oren H", "This is the third commit");
+        commit3.finishCommit();
+
+        //test commit 3 sha1s
+        File testCommit3 = new File("./objects/48079a0e86f8754388046fb774ef73baf1e151b1");
+        assertTrue(testCommit3.exists());
+
+        
+        
     }
 
 
