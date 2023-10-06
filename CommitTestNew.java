@@ -80,25 +80,28 @@ public class CommitTestNew {
     void addThirdAndFourthCommit() throws Exception{
         Git.init();
         addSecondCommit();
-        
-        File testCommit2 = new File("./objects/9ed765d5bc8dda682ad5598fd281fc465d7063c7");
-        assertTrue(testCommit2.exists());
 
         //add files to index for commit 3
         Git.addFile("file5.txt");
         Git.addDirectory("directory 2");
 
         //create commit 3
-        File objects = new File("objects");
-
         Commit commit3 = new Commit("9ed765d5bc8dda682ad5598fd281fc465d7063c7", "Oren H", "This is the third commit");
         commit3.finishCommit();
 
         //test commit 3 sha1s
         File testCommit3 = new File("./objects/27f47e2a347cab8de5ca570ede0d88d11a3261d0");
-
-        System.out.println(Utils.readFileToString(objects.listFiles()[10].toString()));
-        System.out.println(objects.listFiles()[10]);
         assertTrue(testCommit3.exists());
+
+        //create commit 4
+        Git.addFile("file7.txt");
+        Git.addFile("file8.txt");
+
+        Commit commit4 = new Commit("27f47e2a347cab8de5ca570ede0d88d11a3261d0", "Oren H", "This is the fourth commit");
+        commit4.finishCommit();
+
+        //test commit 4
+        File testCommit4 = new File("./objects/8496d551aba45091178a405547f0cd08bd2c0f6b");
+        assertTrue(testCommit4.exists());
     }
 }

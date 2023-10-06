@@ -107,14 +107,9 @@ public class Commit
         }
         br.close();
 
-        //System.out.println(contents);
-
         //replace the previous commit with the new one
         prevCommit.delete();
         Utils.writeStringToFile(contents, prevCommitPath);
-        
-        //System.out.println(prevCommitPath);
-        //System.out.println("\n" + contents);
     }
 
     public void addNextCommitVal(String nextSha) throws IOException
