@@ -54,7 +54,28 @@ public class Git {
         bw.close();
     }
 
-    public static void remove(String fileName) throws IOException{
+    //create a delete file entry
+    public void deleteFile(String fileName) throws Exception{
+
+        BufferedWriter bw = new BufferedWriter(new FileWriter("index", true));
+
+        bw.write("*deleted* ");
+
+        addFile(fileName);
+    }
+
+    //create an edit file entry
+    public void editFile(String fileName) throws Exception{
+
+        BufferedWriter bw = new BufferedWriter(new FileWriter("index", true));
+
+        bw.write("*edited* ");
+        
+        addFile(fileName);
+        
+    }
+
+    public static void removeIndexEntry(String fileName) throws IOException{
         Path filePath = Path.of(fileName);
         String fileContents = Files.readString(filePath);
         File indexFile = new File("index");
