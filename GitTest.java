@@ -73,7 +73,7 @@ public class GitTest {
         fw.close();
 
         g.addFile("testfile2.txt");
-        g.remove("testfile2.txt");
+        g.removeIndexEntry("testfile2.txt");
 
         //check whether it's removed from index
 

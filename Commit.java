@@ -5,6 +5,7 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Commit 
 {
@@ -61,14 +62,28 @@ public class Commit
     //creates a tree from the index file and wipes the index file
     public String createTreeFromIndex() throws Exception{
 
+        ArrayList<String> deletedOrEdited = new ArrayList<String>();
+
         //creates tree from index file
         Tree t = new Tree();
         BufferedReader br = new BufferedReader(new FileReader("index"));
+
+        t.add("tree : " + getShaOfTree(shaOfPrevCommit));
         
-        while(br.ready()){
-            t.add(br.readLine());
+        String line = "";
+        while((line = br.readLine())!=null){
+            if(line.charAt(0)!='*'){
+                t.add(line);
+            }
+            else{
+                deletedOrEdited.add(line);
+            }
         }
         br.close();
+
+        if(deletedOrEdited.size()>0){
+            
+        }
 
         String sha = t.writeToFile();
 
@@ -81,6 +96,35 @@ public class Commit
 
         //returns sha of tree object
         return sha;
+    }
+
+    public String pointToAllExcept(ArrayList<String> deletedOrEdited) throws IOException{
+
+        //create an ArrayList of files to delete and edit
+        ArrayList<String> deletedFileNames = new ArrayList<String>();
+        ArrayList<String> editedFileNames = new ArrayList<String>();
+
+        for(String entry : deletedOrEdited){
+
+            //parse through string
+            String[] entrySegments = entry.split(" : ");
+            String type = entrySegments[0];
+            String fileName = entrySegments[2];
+
+            //sort into deleted and edited
+            if(type.equals("*deleted* blob")){
+                deletedFileNames.add(fileName);
+            }
+            else{
+                editedFileNames.add(fileName);
+            }
+        }
+        
+        //get the sha of the previous commit's tree:
+        String shaOfPrevTree = getShaOfTree(shaOfPrevCommit);
+
+        //check if tree contains any file in deletedOrEdited
+
     }
 
     //add a nextSha to previousCommit line
