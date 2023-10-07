@@ -59,9 +59,7 @@ public class Git {
 
         BufferedWriter bw = new BufferedWriter(new FileWriter("index", true));
 
-        bw.write("*deleted* ");
-
-        addFile(fileName);
+        bw.write("*deleted* : " + fileName);
     }
 
     //create an edit file entry
@@ -69,10 +67,7 @@ public class Git {
 
         BufferedWriter bw = new BufferedWriter(new FileWriter("index", true));
 
-        bw.write("*edited* ");
-        
-        addFile(fileName);
-        
+        bw.write("*edited* : " + fileName);        
     }
 
     public static void removeIndexEntry(String fileName) throws IOException{
