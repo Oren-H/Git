@@ -62,7 +62,8 @@ public class Commit
     //creates a tree from the index file and wipes the index file
     public String createTreeFromIndex() throws Exception{
 
-        ArrayList<String> deletedOrEdited = new ArrayList<String>();
+        ArrayList<String> deleted = new ArrayList<String>();
+        ArrayList<String> edited = new ArrayList<String>();
 
         //creates tree from index file
         Tree t = new Tree();
@@ -75,8 +76,11 @@ public class Commit
             if(line.charAt(0)!='*'){
                 t.add(line);
             }
+            else if (line.charAt(1) == 'd'){
+                deleted.add(line);
+            }
             else{
-                deletedOrEdited.add(line);
+                edited.add(line);
             }
         }
         br.close();
@@ -98,14 +102,35 @@ public class Commit
         return sha;
     }
 
-    public void checkPrevTreeFiles(ArrayList<String> deletedOrEdited){
+    public void checkPrevTreeFiles(ArrayList<String> deleted, ArrayList<String> edited){
 
         String shaOfPrevTree = getShaOfTree(shaOfPrevCommit);
 
         File prevTree = new File("./objects/" + shaOfPrevTree);
 
+        //initialize arrayList of file names
+        ArrayList<String> deletedFileNames = new ArrayList<String>();
+        ArrayList<String> editedFileNames = new ArrayList<String>();
+        
+        for(String deletedFile : deleted){
+            deletedFileNames.add(deletedFile.substring(10));
+        }
+
+        for(String editedFile : edited){
+            editedFileNames.add(editedFile.substring(9));
+        }
+
+        ArrayList<String> deletedOrEdited = new ArrayList<String>(); //combined list of file names
+        deletedOrEdited.addAll(deletedFileNames);
+        deletedOrEdited.addAll(editedFileNames);
+
+        //loop through deleted or edited file
         for(String file : deletedOrEdited){
+
             String line = Utils.readLineWhichContains("./objects/" + shaOfPrevTree, file);
+
+            
+
         }
         
         
