@@ -102,7 +102,7 @@ public class Commit
         return sha;
     }
 
-    public void checkPrevTreeFiles(ArrayList<String> deleted, ArrayList<String> edited){
+    public void checkPrevTreeFiles(ArrayList<String> deleted, ArrayList<String> edited, Tree t){
 
         String shaOfPrevTree = getShaOfTree(shaOfPrevCommit);
 
@@ -127,13 +127,25 @@ public class Commit
         //loop through deleted or edited file
         for(String file : deletedOrEdited){
 
-            String line = Utils.readLineWhichContains("./objects/" + shaOfPrevTree, file);
+            int counter = 0;
 
-            
+            String deletedOrEditedLine = Utils.readLineWhichContains("./objects/" + shaOfPrevTree, file);
 
-        }
-        
-        
+            //if file is not in tree, point to every file in tree
+            if(deletedOrEditedLine.equals("")){
+                BufferedReader br = new BufferedReader(new FileReader(prevTree));
+                String line = "";
+                while((line = br.readLine())!=null){
+                    t.add(line);
+                }
+            }
+            else{
+                if(counter==deletedOrEdited.size()){
+                    //how to get the sha of the prev prev tree
+                    t.add(getShaOfTree())
+                }
+            }
+        }   
     }
 
     public String pointToAllExcept(ArrayList<String> deletedOrEdited, Tree t) throws IOException{
