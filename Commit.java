@@ -95,8 +95,10 @@ public class Commit
         }
         br.close();
 
-        //////
+        //recursive call
+        checkPrevTreeFiles(shaOfPrevCommit, deletedOrEdited, t);
 
+        //create tree
         String sha = t.writeToFile();
 
         //replaces index with empty file
@@ -110,111 +112,55 @@ public class Commit
         return sha;
     }
 
-    public void checkPrevTreeFiles(ArrayList<String> deleted, ArrayList<String> edited, Tree t){
+    //recursive method to go into a previous tree and point to all files that aren't deleted/edited
+    public void checkPrevTreeFiles(String currCommitSha, ArrayList<String> deletedOrEdited, Tree t) throws IOException{
 
-        String shaOfPrevTree = getShaOfTree(shaOfPrevCommit);
+        //initialize tree file of commit
+        String shaOfTree = getShaOfTree(currCommitSha);
+        File treeFile = new File("./objects/" + shaOfTree);
 
-        File prevTree = new File("./objects/" + shaOfPrevTree);
+        BufferedReader br = new BufferedReader(new FileReader(treeFile));
 
-        //initialize arrayList of file names
-        ArrayList<String> deletedFileNames = new ArrayList<String>();
-        ArrayList<String> editedFileNames = new ArrayList<String>();
-        
-        for(String deletedFile : deleted){
-            deletedFileNames.add(deletedFile.substring(10));
-        }
+        //loop through lines in tree
+        String treeLine = "";
+        while((treeLine = br.readLine())!=null){
 
-        for(String editedFile : edited){
-            editedFileNames.add(editedFile.substring(9));
-        }
+            boolean isDeletedOrEdited = false; //if the treeLine is of a deleted or edited file
 
-        ArrayList<String> deletedOrEdited = new ArrayList<String>(); //combined list of file names
-        deletedOrEdited.addAll(deletedFileNames);
-        deletedOrEdited.addAll(editedFileNames);
-
-        //loop through deleted and edited file
-        for(String deletedOrEditedFile : deletedOrEdited){
-
-            int counter = 0;
-
-            String deletedOrEditedLine = Utils.readLineWhichContains("./objects/" + shaOfPrevTree, deletedOrEditedFile);
-
-            //if file is not in tree, point to every file in tree
-            if(deletedOrEditedLine.equals("")){
-                BufferedReader br = new BufferedReader(new FileReader(prevTree));
-                String line = "";
-                while((line = br.readLine())!=null){
-                    t.add(line);
-                }
-            }
-            else{
-                if(counter==deletedOrEdited.size()){
-                    //how to get the sha of the prev prev tree
-                    t.add(getShaOfTree());
+            //loop through files in deletedOrEdited
+            for(String fileName : deletedOrEdited){
+                if(treeLine.contains(fileName)){
+                    deletedOrEdited.remove(fileName);
+                    isDeletedOrEdited = true;
                 }
             }
 
-           
-        }  
-
-        ArrayList<String> uneditedFiles = new ArrayList<String>();
-        int editedLines = 0;
-        
-        BufferedReader br = new BufferedReader(new FileReader(prevTree));
-        String line = "";
-        while((line = br.readLine())!=null){
-            for(String deletedOrEditedFile : deletedOrEdited){
-                if(!line.contains(deletedOrEditedFile)){
-                    uneditedFiles.add(line);
-                }
-                else{
-                    editedLines++;
-                }
+            //add the line to the master tree
+            if(!isDeletedOrEdited){
+                t.add(treeLine);
             }
         }
+        br.close();
 
+        //get the sha of the previous commit
+        File commitFile = new File("./objects/" + currCommitSha);
+        BufferedReader tempBr = new BufferedReader(new FileReader(commitFile));
+        tempBr.readLine();
+        String prevCommitSha = tempBr.readLine();
+        tempBr.close();
 
-        if(editedLines != deletedOrEdited.size()){ //if not every deleted or edited file is in the tree
-
+        if(prevCommitSha.equals("")){
+            return;
         }
-    }
-
-    public String pointToAllExcept(ArrayList<String> deletedOrEdited, Tree t) throws IOException{
-
-        //create an ArrayList of files to delete and edit
-        ArrayList<String> deletedFileNames = new ArrayList<String>();
-        ArrayList<String> editedFileNames = new ArrayList<String>();
-        ArrayList<String> fileNames = new ArrayList<String>();
-
-        for(String entry : deletedOrEdited){
-
-            //parse through string
-            String[] entrySegments = entry.split(" : ");
-            String type = entrySegments[0];
-            String fileName = entrySegments[2];
-
-            //sort into deleted and edited
-            if(type.equals("*deleted* blob")){
-                deletedFileNames.add(fileName);
-            }
-            else{
-                editedFileNames.add(fileName);
-            }
-            fileNames.add(fileName);
+        else if (deletedOrEdited.size() == 0){ 
+            //point to the previous tree
+            String treeSha = getShaOfTree(prevCommitSha);
+            t.add("tree : " + treeSha);
         }
-        
-        //get the sha of the previous commit's tree:
-        String shaOfPrevTree = getShaOfTree(shaOfPrevCommit);
-        for(String fileName : fileNames){
-             String lineContainingFile = Utils.readLineWhichContains("./objects/" + shaOfPrevTree, fileName);
-             if(lineContainingFile.equals("")){
-                t.add(lineContainingFile);
-             }
+        else{
+            //recursive call
+            checkPrevTreeFiles(prevCommitSha, deletedOrEdited, t);
         }
-        String lineContainingFile = Utils.readLineWhichContains("./objects/" + shaOfPrevTree, )
-
-        //check if tree contains any file in deletedOrEdited
-
     }
 
     //add a nextSha to previousCommit line
