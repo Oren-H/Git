@@ -124,12 +124,12 @@ public class Commit
         deletedOrEdited.addAll(deletedFileNames);
         deletedOrEdited.addAll(editedFileNames);
 
-        //loop through deleted or edited file
-        for(String file : deletedOrEdited){
+        //loop through deleted and edited file
+        for(String deletedOrEditedFile : deletedOrEdited){
 
             int counter = 0;
 
-            String deletedOrEditedLine = Utils.readLineWhichContains("./objects/" + shaOfPrevTree, file);
+            String deletedOrEditedLine = Utils.readLineWhichContains("./objects/" + shaOfPrevTree, deletedOrEditedFile);
 
             //if file is not in tree, point to every file in tree
             if(deletedOrEditedLine.equals("")){
@@ -142,10 +142,32 @@ public class Commit
             else{
                 if(counter==deletedOrEdited.size()){
                     //how to get the sha of the prev prev tree
-                    t.add(getShaOfTree())
+                    t.add(getShaOfTree());
                 }
             }
-        }   
+
+           
+        }  
+
+        ArrayList<String> uneditedFiles = new ArrayList<String>();
+        int editedLines = 0;
+        
+        BufferedReader br = new BufferedReader(new FileReader(prevTree));
+        String line = "";
+        while((line = br.readLine())!=null){
+            for(String deletedOrEditedFile : deletedOrEdited){
+                if(!line.contains(deletedOrEditedFile)){
+                    uneditedFiles.add(line);
+                }
+                else{
+                    editedLines++;
+                }
+            }
+        }
+
+        if(editedLines != deletedOrEdited.size()){ //if not every deleted or edited file is in the tree
+            
+        }
     }
 
     public String pointToAllExcept(ArrayList<String> deletedOrEdited, Tree t) throws IOException{
@@ -185,8 +207,6 @@ public class Commit
         //check if tree contains any file in deletedOrEdited
 
     }
-
-    public void pointToFiles()
 
     //add a nextSha to previousCommit line
     public void editPreviousCommit() throws IOException{
