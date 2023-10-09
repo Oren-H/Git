@@ -165,8 +165,9 @@ public class Commit
             }
         }
 
+        
         if(editedLines != deletedOrEdited.size()){ //if not every deleted or edited file is in the tree
-            
+
         }
     }
 
