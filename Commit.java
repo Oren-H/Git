@@ -62,32 +62,40 @@ public class Commit
     //creates a tree from the index file and wipes the index file
     public String createTreeFromIndex() throws Exception{
 
-        ArrayList<String> deleted = new ArrayList<String>();
-        ArrayList<String> edited = new ArrayList<String>();
+        ArrayList<String> deletedOrEdited = new ArrayList<String>(); //contains all deleted or edited file names
 
-        //creates tree from index file
+        //look through index file and add non-edited/deleted files
         Tree t = new Tree();
+
         BufferedReader br = new BufferedReader(new FileReader("index"));
 
-        t.add("tree : " + getShaOfTree(shaOfPrevCommit));
-        
         String line = "";
         while((line = br.readLine())!=null){
-            if(line.charAt(0)!='*'){
+
+            if(line.charAt(0)!='*'){ //if line is not deleted or edited, add it to tree
                 t.add(line);
             }
-            else if (line.charAt(1) == 'd'){
-                deleted.add(line);
+            else if (line.charAt(1) == 'e'){ //if edited
+
+                //add the edited file to deletedOrEdited arraylist
+                String editedFileName = line.substring(9);
+                deletedOrEdited.add(editedFileName);
+
+                //blob and add the edited file to tree
+                Blob editedBlob = new Blob(editedFileName);
+                String editedEntry = "blob : " + editedBlob.getBlobHash() + " : " + editedFileName;
+                t.add(editedEntry);
             }
             else{
-                edited.add(line);
+
+                //add the deleted file to deletedOrEdited arraylist
+                String deletedFileName = line.substring(10);
+                deletedOrEdited.add(deletedFileName);
             }
         }
         br.close();
 
-        if(deletedOrEdited.size()>0){
-            
-        }
+        //////
 
         String sha = t.writeToFile();
 
@@ -165,7 +173,7 @@ public class Commit
             }
         }
 
-        
+
         if(editedLines != deletedOrEdited.size()){ //if not every deleted or edited file is in the tree
 
         }
