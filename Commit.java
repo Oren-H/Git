@@ -181,11 +181,14 @@ public class Commit
         String line = "";
         while((line = br.readLine())!=null){
             if(lineCounter != 2){
-                contents += "\n" + line;
+                if(!contents.equals("")){
+                    contents+="\n";
+                }
+                contents += line;
                 lineCounter++;
             }
             else{
-                contents += ("\n" + shaOfTreeObj);
+                contents = contents + "\n" + getShaOfCommit();
                 lineCounter++;
             }
         }

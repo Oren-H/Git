@@ -50,51 +50,34 @@ public class CommitTest {
         Commit commit1 = new Commit("Oren H", "This is the first commit");
         commit1.finishCommit();
 
-        //test if commit is valid and file exists
-        String commitSha = commit1.getShaOfCommit();
-        assertTrue(commitSha.length() == 40, "commit length is invalid");
+        runBasicCommitTests(commit1, null, null, 2);
 
-        //test if file was made
-        File commitFile = new File("./objects/" + commitSha);
-        assertTrue(commitFile.exists());
-
-        //test if files contains correct number of lines
-        assertTrue(Utils.numOfLines(commitFile)==6);
-
-        //test tree file
-        String treeSha = commit1.shaOfTreeObj;
-        File treeFile = new File("./objects/" + treeSha);
-        assertTrue(treeFile.exists());
-        assertTrue(Utils.numOfLines(treeFile)==2);
-
-        //test prev and next shas
-        assertTrue(Utils.getLine(commitFile, 2).equals(""));
-        System.out.println(Utils.getLine(commitFile, 3));
-        System.out.println(Utils.readFileToString("./objects/"+commitSha));
-        assertTrue(Utils.getLine(commitFile, 3).equals(""));
-
-        //test if index file was wiped
-        String indexContents = Utils.readFileToString("index");
-        assertTrue(indexContents.equals(""));
-
+        testIndexWipe();
         Utils.clearDirectory("objects");
     }
 
     @Test
     void addSecondCommit() throws Exception{
-        addFirstCommit();
+        Git.init();
 
         //add file to index
+        Git.addFile("file1.txt");
+        Git.addFile("file2.txt");
+        Commit commit1 = new Commit("Oren H", "This is the first commit");
+        commit1.finishCommit();
+
         Git.addFile("file3.txt");
         Git.addDirectory("directory 1");
-
-        //create commit
-        Commit commit2 = new Commit("a808d15464b36f348d51b8d296d543101dce7117", "Oren H", "This is the second commit");
+        Commit commit2 = new Commit(commit1.getShaOfCommit(), "Oren H", "This is the first commit");
         commit2.finishCommit();
+        System.out.println(Utils.readFileToString("./objects/" + commit1.getShaOfCommit()));
+        System.out.println(commit2.getShaOfCommit());
 
-        //test sha1s
-        File testCommit2 = new File("./objects/9ed765d5bc8dda682ad5598fd281fc465d7063c7");
-        assertTrue(testCommit2.exists());
+        runBasicCommitTests(commit1, null, commit2, 2);
+        runBasicCommitTests(commit2, commit1, null, 2);
+
+        testIndexWipe();
+        Utils.clearDirectory("objects");
     }
 
     @Test
@@ -126,7 +109,7 @@ public class CommitTest {
         assertTrue(testCommit4.exists());
     }
 
-    public void runBasicCommitTests(Commit commit, String prevSha, String nextSha) throws IOException{
+    public void runBasicCommitTests(Commit commit, Commit prevCommit, Commit nextCommit, int filesAdded) throws IOException{
         //test if sha is valid
         String commitSha = commit.getShaOfCommit();
         assertTrue(commitSha.length() == 40, "commit length is invalid");
@@ -142,12 +125,23 @@ public class CommitTest {
         String treeSha = commit.shaOfTreeObj;
         File treeFile = new File("./objects/" + treeSha);
         assertTrue(treeFile.exists());
+        assertTrue(Utils.numOfLines(treeFile)==filesAdded);
 
-        //test prev and next shas
+        //test prev and next shas if they exist
+        String prevSha = "";
+        String nextSha = "";
+        if(prevCommit != null){
+            prevSha = prevCommit.getShaOfCommit();
+        }
+        if(nextCommit != null){
+            nextSha = nextCommit.getShaOfCommit();
+        }
         assertTrue(Utils.getLine(commitFile, 2).equals(prevSha));
         assertTrue(Utils.getLine(commitFile, 3).equals(nextSha));
+    }
 
-
-
+    public void testIndexWipe() throws Exception{
+        String indexContents = Utils.readFileToString("index");
+        assertTrue(indexContents.equals(""));
     }
 }
