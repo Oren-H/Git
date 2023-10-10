@@ -61,7 +61,6 @@ public class Commit
 
     //creates a tree from the index file and wipes the index file
     public String createTreeFromIndex() throws Exception{
-
         ArrayList<String> deletedOrEdited = new ArrayList<String>(); //contains all deleted or edited file names
 
         //look through index file and add non-edited/deleted files
@@ -71,7 +70,6 @@ public class Commit
 
         String line = "";
         while((line = br.readLine())!=null){
-
             if(line.charAt(0)!='*'){ //if line is not deleted or edited, add it to tree
                 t.add(line);
             }
@@ -96,17 +94,14 @@ public class Commit
         br.close();
 
         //recursive call
-        checkPrevTreeFiles(shaOfPrevCommit, deletedOrEdited, t);
+        if(shaOfPrevCommit!=null){
+            checkPrevTreeFiles(shaOfPrevCommit, deletedOrEdited, t);
+        }
 
         //create tree
         String sha = t.writeToFile();
 
-        //replaces index with empty file
-        File indexFile = new File("index");
-        indexFile.delete();
-
-        File emptyFile = new File("index");
-        emptyFile.createNewFile();
+        wipeIndexFile();
 
         //returns sha of tree object
         return sha;
@@ -124,7 +119,6 @@ public class Commit
         //loop through lines in tree
         String treeLine = "";
         while((treeLine = br.readLine())!=null){
-
             boolean isDeletedOrEdited = false; //if the treeLine is of a deleted or edited file
 
             //loop through files in deletedOrEdited
@@ -161,6 +155,15 @@ public class Commit
             //recursive call
             checkPrevTreeFiles(prevCommitSha, deletedOrEdited, t);
         }
+    }
+    
+    //replaces index with empty file
+    public void wipeIndexFile() throws IOException{
+        File indexFile = new File("index");
+        indexFile.delete();
+
+        File emptyFile = new File("index");
+        emptyFile.createNewFile();
     }
 
     //add a nextSha to previousCommit line
@@ -215,7 +218,7 @@ public class Commit
     //returns the sha of a tree based on the sha of its commit
     public static String getShaOfTree(String shaOfCommit) throws IOException{
 
-        BufferedReader br = new BufferedReader(new FileReader("./objects/shaOfCommit"));
+        BufferedReader br = new BufferedReader(new FileReader("./objects/" + shaOfCommit));
 
         String shaOfTree = br.readLine();
 
