@@ -1,5 +1,8 @@
 import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import org.junit.jupiter.api.AfterAll;
@@ -115,7 +118,48 @@ public class CommitTest {
         Utils.clearDirectory("objects");
     }
 
-    public void runBasicCommitTests(Commit commit, Commit prevCommit, Commit nextCommit, int filesAdded) throws IOException{
+    @Test
+    void addAndDeleteOneFile() throws Exception{
+        Git.init();
+        Git.addFile("file1.txt");
+        Commit commit1 = new Commit("Oren H", "Added file");
+        commit1.finishCommit();
+
+        Git.deleteFile("file1.txt");
+        Commit commit2 = new Commit(commit1.getShaOfCommit(), "Oren H", "Deleted file");
+        commit2.finishCommit();
+
+        runBasicCommitTests(commit1, null, commit2, 1);
+        runBasicCommitTests(commit2, commit1, null, 0);
+
+        testIndexWipe();
+        Utils.clearDirectory("objects");
+    }
+
+    @Test
+    void addAndEditOneFile() throws Exception{
+        Git.init();
+        Git.addFile("file1.txt");
+        Commit commit1 = new Commit("Oren H", "Added file");
+        commit1.finishCommit();
+
+        File file1 = new File("./objects/file1.txt");
+        BufferedWriter bw = new BufferedWriter(new FileWriter(file1));
+        bw.write("hello");
+        bw.close();
+
+        Git.editFile("file1.txt");
+        Commit commit2 = new Commit(commit1.getShaOfCommit(), "Oren H", "Edited file");
+        commit2.finishCommit();
+
+        runBasicCommitTests(commit1, null, commit2, 1);
+        runBasicCommitTests(commit2, commit1, null, 1);
+
+        testIndexWipe();
+        Utils.clearDirectory("objects");
+    }
+
+    public void runBasicCommitTests(Commit commit, Commit prevCommit, Commit nextCommit, int filesInTree) throws IOException{
         //test if sha is valid
         String commitSha = commit.getShaOfCommit();
         assertTrue(commitSha.length() == 40, "commit length is invalid");
@@ -131,7 +175,7 @@ public class CommitTest {
         String treeSha = commit.shaOfTreeObj;
         File treeFile = new File("./objects/" + treeSha);
         assertTrue(treeFile.exists());
-        assertTrue(Utils.numOfLines(treeFile)==filesAdded);
+        assertTrue(Utils.numOfLines(treeFile)==filesInTree);
 
         //test prev and next shas if they exist
         String prevSha = "";

@@ -55,7 +55,7 @@ public class Git {
     }
 
     //create a delete file entry
-    public void deleteFile(String fileName) throws Exception{
+    public static void deleteFile(String fileName) throws Exception{
 
         BufferedWriter bw = new BufferedWriter(new FileWriter("index", true));
 
@@ -63,7 +63,7 @@ public class Git {
     }
 
     //create an edit file entry
-    public void editFile(String fileName) throws Exception{
+    public static void editFile(String fileName) throws Exception{
 
         BufferedWriter bw = new BufferedWriter(new FileWriter("index", true));
 
