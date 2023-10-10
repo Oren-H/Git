@@ -45,7 +45,6 @@ public class Commit
 
     public void finishCommit() throws IOException
     {
-        
         File f = new File("./objects/"+getShaOfCommit());
         f.createNewFile();
         BufferedWriter bw = new BufferedWriter(new FileWriter("./objects/"+ getShaOfCommit()));

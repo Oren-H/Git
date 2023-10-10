@@ -42,4 +42,24 @@ public class Utils {
         pw.print(str); 
         pw.close();
     }
+
+    public static int numOfLines(File file) throws IOException{
+        int lines = 0;
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        while(br.readLine()!=null){
+            lines++;
+        }
+        br.close();
+        return lines;
+    }
+
+    public static String getLine(File file, int lineNum) throws IOException{
+        String currString = "";
+        BufferedReader br = new BufferedReader(new FileReader(file));
+        for(int i = 0; i<lineNum; i++){
+            currString = br.readLine();
+        }
+        br.close();
+        return currString;
+    }
 }

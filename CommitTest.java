@@ -53,14 +53,31 @@ public class CommitTest {
         Commit commit1 = new Commit("Oren H", "This is the first commit");
         commit1.finishCommit();
 
-        //test sha1s
-        File testCommit1 = new File("./objects/a808d15464b36f348d51b8d296d543101dce7117");
-        assertTrue(testCommit1.exists());
+        //test if commit is valid and file exists
+        String commitSha = commit1.getShaOfCommit();
+        assertTrue(commitSha.length() == 40, "commit length is invalid");
+
+        //test if file was made
+        File commitFile = new File("./objects/" + commitSha);
+        assertTrue(commitFile.exists());
+
+        //test if files contains correct number of lines
+        assertTrue(Utils.numOfLines(commitFile)==6);
+
+        //test tree file
+        String treeSha = commit1.shaOfTreeObj;
+        File treeFile = new File("./objects/" + treeSha);
+        assertTrue(treeFile.exists());
+        assertTrue(Utils.numOfLines(treeFile)==2);
+
+        //test if index file was wiped
+        File indexFile = new File("index");
+        String indexContents = Utils.readFileToString("index");
+        assertTrue(indexContents.equals(""));
     }
 
     @Test
     void addSecondCommit() throws Exception{
-        Git.init();
         addFirstCommit();
 
         //add file to index
