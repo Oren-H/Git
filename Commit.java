@@ -23,6 +23,7 @@ public class Commit
 
         //saves rest of variables
         this.shaOfPrevCommit = shaOfPrevCommit;
+        this.shaOfNextCommit = "";
         this.authorName = authorName;
         this.Summary = Summary;
         date = getDate();
@@ -38,6 +39,7 @@ public class Commit
 
         //saves rest of variables
         shaOfPrevCommit = "";
+        this.shaOfNextCommit = "";
         this.authorName = authorName;
         this.Summary = Summary;
         date = getDate();

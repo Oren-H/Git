@@ -35,10 +35,7 @@ public class CommitTest {
     @AfterAll
     static void runAfterAll(){
         File index = new File("index");
-        File objects = new File("objects");
-        for(File file : objects.listFiles()){
-            file.delete();
-        }
+        Utils.clearDirectory("objects");
         index.delete();
     }
 
@@ -70,10 +67,17 @@ public class CommitTest {
         assertTrue(treeFile.exists());
         assertTrue(Utils.numOfLines(treeFile)==2);
 
+        //test prev and next shas
+        assertTrue(Utils.getLine(commitFile, 2).equals(""));
+        System.out.println(Utils.getLine(commitFile, 3));
+        System.out.println(Utils.readFileToString("./objects/"+commitSha));
+        assertTrue(Utils.getLine(commitFile, 3).equals(""));
+
         //test if index file was wiped
-        File indexFile = new File("index");
         String indexContents = Utils.readFileToString("index");
         assertTrue(indexContents.equals(""));
+
+        Utils.clearDirectory("objects");
     }
 
     @Test
@@ -120,5 +124,30 @@ public class CommitTest {
         //test commit 4
         File testCommit4 = new File("./objects/8496d551aba45091178a405547f0cd08bd2c0f6b");
         assertTrue(testCommit4.exists());
+    }
+
+    public void runBasicCommitTests(Commit commit, String prevSha, String nextSha) throws IOException{
+        //test if sha is valid
+        String commitSha = commit.getShaOfCommit();
+        assertTrue(commitSha.length() == 40, "commit length is invalid");
+
+        //test if file was made
+        File commitFile = new File("./objects/" + commitSha);
+        assertTrue(commitFile.exists());
+
+        //test if files contains correct number of lines
+        assertTrue(Utils.numOfLines(commitFile)==6);
+
+        //test tree file
+        String treeSha = commit.shaOfTreeObj;
+        File treeFile = new File("./objects/" + treeSha);
+        assertTrue(treeFile.exists());
+
+        //test prev and next shas
+        assertTrue(Utils.getLine(commitFile, 2).equals(prevSha));
+        assertTrue(Utils.getLine(commitFile, 3).equals(nextSha));
+
+
+
     }
 }

@@ -62,4 +62,11 @@ public class Utils {
         br.close();
         return currString;
     }
+
+    public static void clearDirectory(String dir){
+        File directory = new File(dir);
+        for(File fileName : directory.listFiles()){
+            fileName.delete();
+        }
+    }
 }
