@@ -70,9 +70,7 @@ public class CommitTest {
         Git.addDirectory("directory 1");
         Commit commit2 = new Commit(commit1.getShaOfCommit(), "Oren H", "This is the first commit");
         commit2.finishCommit();
-        System.out.println(Utils.readFileToString("./objects/" + commit1.getShaOfCommit()));
-        System.out.println(commit2.getShaOfCommit());
-
+        
         runBasicCommitTests(commit1, null, commit2, 2);
         runBasicCommitTests(commit2, commit1, null, 2);
 
@@ -83,30 +81,38 @@ public class CommitTest {
     @Test
     void addThirdAndFourthCommit() throws Exception{
         Git.init();
-        addSecondCommit();
+        
+        Git.addFile("file1.txt");
+        Git.addFile("file2.txt");
+        Commit commit1 = new Commit("Oren H", "This is the first commit");
+        commit1.finishCommit();
+
+        Git.addFile("file3.txt");
+        Git.addDirectory("directory 1");
+        Commit commit2 = new Commit(commit1.getShaOfCommit(), "Oren H", "This is the first commit");
+        commit2.finishCommit();
 
         //add files to index for commit 3
         Git.addFile("file5.txt");
         Git.addDirectory("directory 2");
 
-        //create commit 3
-        Commit commit3 = new Commit("9ed765d5bc8dda682ad5598fd281fc465d7063c7", "Oren H", "This is the third commit");
+        Commit commit3 = new Commit(commit2.getShaOfCommit(), "Oren H", "This is the third commit");
         commit3.finishCommit();
-
-        //test commit 3 sha1s
-        File testCommit3 = new File("./objects/27f47e2a347cab8de5ca570ede0d88d11a3261d0");
-        assertTrue(testCommit3.exists());
 
         //create commit 4
         Git.addFile("file7.txt");
         Git.addFile("file8.txt");
 
-        Commit commit4 = new Commit("27f47e2a347cab8de5ca570ede0d88d11a3261d0", "Oren H", "This is the fourth commit");
+        Commit commit4 = new Commit(commit3.getShaOfCommit(), "Oren H", "This is the fourth commit");
         commit4.finishCommit();
 
-        //test commit 4
-        File testCommit4 = new File("./objects/8496d551aba45091178a405547f0cd08bd2c0f6b");
-        assertTrue(testCommit4.exists());
+        runBasicCommitTests(commit1, null, commit2, 2);
+        runBasicCommitTests(commit2, commit1, commit3, 2);
+        runBasicCommitTests(commit3, commit2, commit4, 2);
+        runBasicCommitTests(commit4, commit3, null, 2);
+
+        testIndexWipe();
+        Utils.clearDirectory("objects");
     }
 
     public void runBasicCommitTests(Commit commit, Commit prevCommit, Commit nextCommit, int filesAdded) throws IOException{
