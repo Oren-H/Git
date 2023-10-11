@@ -117,6 +117,21 @@ public class Commit
     //recursive method to go into a previous tree and point to all files that aren't deleted/edited
     public void checkPrevTreeFiles(String currCommitSha, ArrayList<String> deletedOrEdited, Tree t) throws IOException{
 
+        //get the sha of the previous commit
+        File commitFile = new File("./objects/" + currCommitSha);
+        BufferedReader tempBr = new BufferedReader(new FileReader(commitFile));
+        tempBr.readLine();
+        String prevCommitSha = tempBr.readLine();
+        tempBr.close();
+
+        String treeSha = "";
+        String prevTreeEntry = "";
+        if(!prevCommitSha.equals("")){
+            treeSha = getShaOfTree(prevCommitSha);
+            prevTreeEntry = "tree : " + treeSha;
+        }
+        boolean containsTreeLink = false; //whether or not the current tree has a reference to a past tree;
+
         //initialize tree file of commit
         String shaOfTree = getShaOfTree(currCommitSha);
         File treeFile = new File("./objects/" + shaOfTree);
@@ -127,6 +142,10 @@ public class Commit
         String treeLine = "";
         while((treeLine = br.readLine())!=null){
             boolean isDeletedOrEdited = false; //if the treeLine is of a deleted or edited file
+
+            if(!prevTreeEntry.equals("") && treeLine.equals(prevTreeEntry)){
+                containsTreeLink = true;
+            }
 
             //loop through files in deletedOrEdited
             for(int i = 0; i<deletedOrEdited.size();i++){
@@ -144,20 +163,14 @@ public class Commit
         }
         br.close();
 
-        //get the sha of the previous commit
-        File commitFile = new File("./objects/" + currCommitSha);
-        BufferedReader tempBr = new BufferedReader(new FileReader(commitFile));
-        tempBr.readLine();
-        String prevCommitSha = tempBr.readLine();
-        tempBr.close();
+        
 
-        if(prevCommitSha.equals("")){
+        if(!containsTreeLink){
             return;
         }
         else if (deletedOrEdited.size() == 0){ 
             //point to the previous tree
-            String treeSha = getShaOfTree(prevCommitSha);
-            t.add("tree : " + treeSha);
+            t.add(prevTreeEntry);
             System.out.println("\nThis line of code has been run");
         }
         else{
