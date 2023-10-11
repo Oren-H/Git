@@ -77,7 +77,7 @@ public class Commit
             else if (line.charAt(1) == 'e'){ //if edited
 
                 //add the edited file to deletedOrEdited arraylist
-                String editedFileName = line.substring(9);
+                String editedFileName = line.substring(11);
                 deletedOrEdited.add(editedFileName);
 
                 //blob and add the edited file to tree
@@ -88,7 +88,7 @@ public class Commit
             else{
 
                 //add the deleted file to deletedOrEdited arraylist
-                String deletedFileName = line.substring(10);
+                String deletedFileName = line.substring(12);
                 deletedOrEdited.add(deletedFileName);
             }
         }
@@ -103,7 +103,6 @@ public class Commit
                 String treeSha = getShaOfTree(shaOfPrevCommit);
                 t.add("tree : " + treeSha);
             }
-            
         }
 
         //create tree
@@ -130,7 +129,8 @@ public class Commit
             boolean isDeletedOrEdited = false; //if the treeLine is of a deleted or edited file
 
             //loop through files in deletedOrEdited
-            for(String fileName : deletedOrEdited){
+            for(int i = 0; i<deletedOrEdited.size();i++){
+                String fileName = deletedOrEdited.get(i);
                 if(treeLine.contains(fileName)){
                     deletedOrEdited.remove(fileName);
                     isDeletedOrEdited = true;

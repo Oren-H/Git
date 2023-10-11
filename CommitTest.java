@@ -176,6 +176,7 @@ public class CommitTest {
         File treeFile = new File("./objects/" + treeSha);
         System.out.println(Utils.readFileToString("./objects/" + treeSha)+ "\n");
         assertTrue(treeFile.exists());
+        System.out.println(Utils.numOfLines(treeFile));
         assertTrue(Utils.numOfLines(treeFile)==filesInTree);
 
         //test prev and next shas if they exist
