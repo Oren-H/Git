@@ -156,14 +156,12 @@ public class Commit
                 }
             }
 
-            //add the line to the master tree
-            if(!isDeletedOrEdited){
+            //add the line to the master tree if it is not a link to a previous tree
+            if(!isDeletedOrEdited && !treeLine.equals(prevTreeEntry)){
                 t.add(treeLine);
             }
         }
         br.close();
-
-        
 
         if(!containsTreeLink){
             return;

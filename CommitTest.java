@@ -189,6 +189,49 @@ public class CommitTest {
         runBasicCommitTests(commit3, commit2, null, 1);
     }
 
+    @Test
+    void deleteAndEditMultipleFiles() throws Exception{
+        Git.init();
+
+        //add file
+        Git.addFile("file1.txt");
+        Git.addFile("file2.txt");
+        Commit commit1 = new Commit("Oren H", "Added file");
+        commit1.finishCommit();
+
+        //edit file
+        File file1 = new File("./objects/file1.txt");
+        BufferedWriter bw = new BufferedWriter(new FileWriter(file1));
+        bw.write("hello");
+        bw.close();
+
+        Git.editFile("file1.txt");
+        Commit commit2 = new Commit(commit1.getShaOfCommit(), "Oren H", "Edited file");
+        commit2.finishCommit();
+
+        //delete file
+        Git.deleteFile("file2.txt");
+        Commit commit3 = new Commit(commit2.getShaOfCommit(), "Oren H", "Deleted file");
+        commit3.finishCommit();
+
+        //add another file
+        Git.addFile("file3.txt");
+        Commit commit4 = new Commit(commit3.getShaOfCommit(), "Oren H", "Added file");
+        commit4.finishCommit();
+
+        //delete two files
+        Git.deleteFile("file1.txt");
+        Git.deleteFile("file3.txt");
+        Commit commit5 = new Commit(commit4.getShaOfCommit(), "Oren H", "Deleted two files");
+        commit5.finishCommit();
+
+        runBasicCommitTests(commit1, null, commit2, 2);
+        runBasicCommitTests(commit2, commit1, commit3, 2);
+        runBasicCommitTests(commit3, commit2, commit4, 1);
+        runBasicCommitTests(commit4, commit3, commit5, 2);
+        runBasicCommitTests(commit5, commit4, null, 0);
+    }
+
     public void runBasicCommitTests(Commit commit, Commit prevCommit, Commit nextCommit, int filesInTree) throws Exception{
         //test if sha is valid
         String commitSha = commit.getShaOfCommit();
