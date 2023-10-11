@@ -75,7 +75,7 @@ public class CommitTest {
         commit2.finishCommit();
         
         runBasicCommitTests(commit1, null, commit2, 2);
-        runBasicCommitTests(commit2, commit1, null, 2);
+        runBasicCommitTests(commit2, commit1, null, 3);
 
         testIndexWipe();
         Utils.clearDirectory("objects");
@@ -110,9 +110,9 @@ public class CommitTest {
         commit4.finishCommit();
 
         runBasicCommitTests(commit1, null, commit2, 2);
-        runBasicCommitTests(commit2, commit1, commit3, 2);
-        runBasicCommitTests(commit3, commit2, commit4, 2);
-        runBasicCommitTests(commit4, commit3, null, 2);
+        runBasicCommitTests(commit2, commit1, commit3, 3);
+        runBasicCommitTests(commit3, commit2, commit4, 3);
+        runBasicCommitTests(commit4, commit3, null, 3);
 
         testIndexWipe();
         Utils.clearDirectory("objects");
@@ -159,7 +159,7 @@ public class CommitTest {
         Utils.clearDirectory("objects");
     }
 
-    public void runBasicCommitTests(Commit commit, Commit prevCommit, Commit nextCommit, int filesInTree) throws IOException{
+    public void runBasicCommitTests(Commit commit, Commit prevCommit, Commit nextCommit, int filesInTree) throws Exception{
         //test if sha is valid
         String commitSha = commit.getShaOfCommit();
         assertTrue(commitSha.length() == 40, "commit length is invalid");
@@ -174,6 +174,7 @@ public class CommitTest {
         //test tree file
         String treeSha = commit.shaOfTreeObj;
         File treeFile = new File("./objects/" + treeSha);
+        System.out.println(Utils.readFileToString("./objects/" + treeSha)+ "\n");
         assertTrue(treeFile.exists());
         assertTrue(Utils.numOfLines(treeFile)==filesInTree);
 

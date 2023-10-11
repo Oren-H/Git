@@ -18,9 +18,6 @@ public class Commit
 
     public Commit(String shaOfPrevCommit, String authorName, String Summary) throws Exception
     {
-        //creates a tree and saves sha
-        shaOfTreeObj = createTreeFromIndex();
-
         //saves rest of variables
         this.shaOfPrevCommit = shaOfPrevCommit;
         this.shaOfNextCommit = "";
@@ -28,21 +25,24 @@ public class Commit
         this.Summary = Summary;
         date = getDate();
 
+        //creates a tree and saves sha
+        shaOfTreeObj = createTreeFromIndex();
+
         //edit the nextCommit line of the previous Commit file
         editPreviousCommit();
     }
 
     public Commit(String authorName, String Summary) throws Exception
     {
-        //creates a tree and saves sha
-        shaOfTreeObj = createTreeFromIndex();
-
         //saves rest of variables
         shaOfPrevCommit = "";
         this.shaOfNextCommit = "";
         this.authorName = authorName;
         this.Summary = Summary;
         date = getDate();
+
+        //creates a tree and saves sha
+        shaOfTreeObj = createTreeFromIndex();
     }
 
     public void finishCommit() throws IOException
@@ -95,8 +95,15 @@ public class Commit
         br.close();
 
         //recursive call
-        if(shaOfPrevCommit!=null){
-            checkPrevTreeFiles(shaOfPrevCommit, deletedOrEdited, t);
+        if(shaOfPrevCommit != ""){
+            if(deletedOrEdited.size()!=0){
+                checkPrevTreeFiles(shaOfPrevCommit, deletedOrEdited, t);
+            }
+            else{
+                String treeSha = getShaOfTree(shaOfPrevCommit);
+                t.add("tree : " + treeSha);
+            }
+            
         }
 
         //create tree
@@ -151,6 +158,7 @@ public class Commit
             //point to the previous tree
             String treeSha = getShaOfTree(prevCommitSha);
             t.add("tree : " + treeSha);
+            System.out.println("\nThis line of code has been run");
         }
         else{
             //recursive call
